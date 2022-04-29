@@ -1,0 +1,29 @@
+﻿@model Hotel_des_ventes.Models.ItemOfferModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if(!string.IsNullOrEmpty(ViewBag.ErrorMessage)) {
+    <script charset="utf-8">
+        var y=document.createElement('span');
+        y.innerHTML="@ViewBag.ErrorMessage";
+        alert(y.innerHTML);
+    </script>
+}
+
+@using(Html.BeginForm("Buy", "Item", FormMethod.Post))
+{
+    <h1>@Html.DisplayFor(Model => Model.Name)</h1>
+    <div style="margin-top: 50px; margin-bottom: 50px">
+        <ul>
+            <li>Quantity: @Html.DisplayFor(Model => Model.Quantity)</li>
+            <li>Price: @Html.DisplayFor(Model => Model.Price)</li>
+            <li>Seller: @Html.DisplayFor(Model => Model.Seller)</li>
+        </ul>
+    </div>
+
+    @Html.HiddenFor(model => model.Id)
+    
+    <input type="submit" value="Buy"/>
+}

@@ -13,8 +13,9 @@ namespace Hotel_des_ventes.Controllers
             _logger = logger;
         }
 
-        public IActionResult Login()
+        public IActionResult Login(int? AnnounceID)
         {
+            TempData.Add("AnnounceID", AnnounceID);
             return View();
         }
 
@@ -30,6 +31,12 @@ namespace Hotel_des_ventes.Controllers
                 CookieOptions option = new CookieOptions();
                 option.Expires = dateTime;
                 Response.Cookies.Append("UserID", fc["Id"], option);
+            }
+            if (TempData["AnnounceID"] != null)
+            {
+                var AnnounceID = TempData["AnnounceID"];
+                TempData.Remove("AnnounceID");
+                return RedirectToAction("Index", "Item", new { AnnounceID = AnnounceID });
             }
             return RedirectToAction("Index", "Home");
         }
