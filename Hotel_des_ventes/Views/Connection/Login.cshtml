@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Login", "Connection", FormMethod.Post))
+{ 
+    <table>
+        <tr>
+            <td>Enter ID: </td>            
+            <td>@Html.TextBox("Id")</td>
+        </tr>
+        <tr>
+            <td>Enter Password: </td>
+            <td>@Html.TextBox("Password")</td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Submit"></td>
+        </tr>
+    </table>
+}
