@@ -2,6 +2,7 @@
 {
 	public interface IUserRepository : IRepository<DataAccess.User, Dbo.User>
 	{
-		public int Count();
+		int Count();
+		Dbo.User? GetById(int id);
 	}
 }

@@ -8,8 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddEntityFrameworkSqlServer()
-    .AddDbContext<API.DataAccess.Hotel_des_ventesContext>();
+builder.Services.AddDbContext<API.DataAccess.Hotel_des_ventesContext>();
 builder.Services.AddAutoMapper(typeof(API.Repositories.AutomapperProfiles));
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();

@@ -2,6 +2,8 @@
 {
 	public interface IUserService
 	{
-		public int GetNumberOfUsers();
+		int GetNumberOfUsers();
+		Task<Dbo.User?> CreateUser(string name, string password);
+		Dbo.User? GetUserById(int id);
 	}
 }

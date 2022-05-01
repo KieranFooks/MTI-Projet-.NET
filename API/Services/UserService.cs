@@ -12,9 +12,28 @@ namespace API.Services
 			_userRepository = userRepository;
 		}
 
+		public async Task<Dbo.User?> CreateUser(string username, string password)
+		{
+			var user = new Dbo.User
+			{
+				Name = username,
+				Password = password,
+				Money = 100
+			};
+
+			// TODO: Give items to the user
+
+			return await _userRepository.Insert(user);
+		}
+
 		public int GetNumberOfUsers()
 		{
 			return 0;
+		}
+
+		public Dbo.User? GetUserById(int id)
+		{
+			return _userRepository.GetById(id);
 		}
 	}
 }

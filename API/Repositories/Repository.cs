@@ -20,22 +20,50 @@ namespace API.Repositories
 			_set = context.Set<DBEntity>();
 		}
 
-		Task<bool> IRepository<DBEntity, ModelEntity>.Delete(long idEntity)
+		public virtual async Task<bool> Delete(long idEntity)
 		{
 			throw new NotImplementedException();
 		}
 
-		Task<IEnumerable<ModelEntity>> IRepository<DBEntity, ModelEntity>.Get(string includeTables)
+		public virtual async Task<IEnumerable<ModelEntity>> Get(string includeTables)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				List<DBEntity>? query = null;
+				if (String.IsNullOrEmpty(includeTables))
+				{
+					query = await _set.AsNoTracking().ToListAsync();
+				}
+				else
+				{
+					query = await _set.Include(includeTables).AsNoTracking().ToListAsync();
+				}
+
+				return _mapper.Map<ModelEntity[]>(query);
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
 		}
 
-		Task<ModelEntity> IRepository<DBEntity, ModelEntity>.Insert(ModelEntity entity)
+		public virtual async Task<ModelEntity?> Insert(ModelEntity entity)
 		{
-			throw new NotImplementedException();
+			DBEntity dbEntity = _mapper.Map<DBEntity>(entity);
+			_set.Add(dbEntity);
+			try
+			{
+				await _context.SaveChangesAsync();
+				ModelEntity newEntity = _mapper.Map<ModelEntity>(dbEntity);
+				return newEntity;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
 		}
 
-		Task<ModelEntity> IRepository<DBEntity, ModelEntity>.Update(ModelEntity entity)
+		public virtual async Task<ModelEntity> Update(ModelEntity entity)
 		{
 			throw new NotImplementedException();
 		}
