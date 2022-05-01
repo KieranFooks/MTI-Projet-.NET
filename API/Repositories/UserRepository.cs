@@ -4,7 +4,7 @@ using AutoMapper;
 
 namespace API.Repositories
 {
-	public class UserRepository : Repository<DataAccess.User, Dbo.User>, IUserRepository
+	public class UserRepository : Repository<DataAccess.Tuser, Dbo.User>, IUserRepository
 	{
 		public UserRepository(Hotel_des_ventesContext context, IMapper mapper, ILogger<UserRepository> logger) : base(context, mapper, logger)
 		{
@@ -27,7 +27,7 @@ namespace API.Repositories
 		{
 			try
 			{
-				DataAccess.User? user = _set.FirstOrDefault(user => user.Id == id);
+				DataAccess.Tuser? user = _set.FirstOrDefault(user => user.Id == id);
 				return _mapper.Map<Dbo.User?>(user);
 			}
 			catch (Exception ex)
@@ -41,7 +41,7 @@ namespace API.Repositories
 		{
 			try
 			{
-				DataAccess.User? user = _set.FirstOrDefault(user => user.Name.Equals(name));
+				DataAccess.Tuser? user = _set.FirstOrDefault(user => user.Name.Equals(name));
 				return _mapper.Map<Dbo.User?>(user);
 			}
 			catch (Exception ex)

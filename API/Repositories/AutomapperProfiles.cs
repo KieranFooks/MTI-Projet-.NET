@@ -6,17 +6,17 @@ namespace API.Repositories
 	{
 		public AutomapperProfiles()
 		{
-			CreateMap<DataAccess.Inventory, Dbo.Inventory>();
-			CreateMap<Dbo.Inventory, DataAccess.Inventory>();
+			CreateMap<DataAccess.Tinventory, Dbo.Inventory>();
+			CreateMap<Dbo.Inventory, DataAccess.Tinventory>();
 
-			CreateMap<DataAccess.User, Dbo.User>();
-			CreateMap<Dbo.User, DataAccess.User>();
+			CreateMap<DataAccess.Tuser, Dbo.User>();
+			CreateMap<Dbo.User, DataAccess.Tuser>();
 
-			CreateMap<DataAccess.Item, Dbo.Item>();
-			CreateMap<Dbo.Item, DataAccess.Item>();
+			CreateMap<DataAccess.Titem, Dbo.Item>();
+			CreateMap<Dbo.Item, DataAccess.Titem>();
 
-			CreateMap<DataAccess.Market, Dbo.Market>();
-			CreateMap<Dbo.Market, DataAccess.Market>();
+			CreateMap<DataAccess.Tmarket, Dbo.Market>();
+			CreateMap<Dbo.Market, DataAccess.Tmarket>();
 		}
 	}
 }

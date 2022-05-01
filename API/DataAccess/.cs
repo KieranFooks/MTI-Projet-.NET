@@ -16,27 +16,27 @@ namespace API.DataAccess
         {
         }
 
-        public virtual DbSet<Inventory> Inventories { get; set; } = null!;
-        public virtual DbSet<Item> Items { get; set; } = null!;
-        public virtual DbSet<Market> Markets { get; set; } = null!;
-        public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<Tinventory> Tinventories { get; set; } = null!;
+        public virtual DbSet<Titem> Titems { get; set; } = null!;
+        public virtual DbSet<Tmarket> Tmarkets { get; set; } = null!;
+        public virtual DbSet<Tuser> Tusers { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=.\\;Initial Catalog=Hotel_des_ventes;Integrated Security=True");
+                optionsBuilder.UseSqlServer("Data Source=DESKTOP-N5RJ51B;Initial Catalog=Hotel_des_ventes;Trusted_Connection=True;TrustServerCertificate=True");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Inventory>(entity =>
+            modelBuilder.Entity<Tinventory>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToTable("Inventory");
+                entity.ToTable("TInventory");
 
                 entity.Property(e => e.IdItem).HasColumnName("Id_item");
 
@@ -55,22 +55,20 @@ namespace API.DataAccess
                     .HasConstraintName("FK_Inventory_User");
             });
 
-            modelBuilder.Entity<Item>(entity =>
+            modelBuilder.Entity<Titem>(entity =>
             {
-                entity.ToTable("Item");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.ToTable("TItem");
 
                 entity.Property(e => e.Description).HasColumnType("text");
 
                 entity.Property(e => e.Name).HasColumnType("text");
             });
 
-            modelBuilder.Entity<Market>(entity =>
+            modelBuilder.Entity<Tmarket>(entity =>
             {
-                entity.ToTable("Market");
+                entity.ToTable("TMarket");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.IdItem).HasColumnName("Id_item");
 
@@ -79,23 +77,21 @@ namespace API.DataAccess
                 entity.Property(e => e.IsSold).HasColumnName("Is_sold");
 
                 entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.Market)
-                    .HasForeignKey<Market>(d => d.Id)
+                    .WithOne(p => p.Tmarket)
+                    .HasForeignKey<Tmarket>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Market_User");
 
                 entity.HasOne(d => d.IdItemNavigation)
-                    .WithMany(p => p.Markets)
+                    .WithMany(p => p.Tmarkets)
                     .HasForeignKey(d => d.IdItem)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Market_Item");
             });
 
-            modelBuilder.Entity<User>(entity =>
+            modelBuilder.Entity<Tuser>(entity =>
             {
-                entity.ToTable("User");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.ToTable("TUser");
 
                 entity.Property(e => e.Name).HasColumnType("text");
 

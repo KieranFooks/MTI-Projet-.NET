@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace API.DataAccess
 {
-    public partial class Market
+    public partial class Tmarket
     {
         public int Id { get; set; }
         public int IdSeller { get; set; }
@@ -12,7 +12,7 @@ namespace API.DataAccess
         public int Quantity { get; set; }
         public bool IsSold { get; set; }
 
-        public virtual Item IdItemNavigation { get; set; } = null!;
-        public virtual User IdNavigation { get; set; } = null!;
+        public virtual Titem IdItemNavigation { get; set; } = null!;
+        public virtual Tuser IdNavigation { get; set; } = null!;
     }
 }

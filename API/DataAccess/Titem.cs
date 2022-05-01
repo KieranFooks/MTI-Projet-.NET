@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace API.DataAccess
 {
-    public partial class Item
+    public partial class Titem
     {
-        public Item()
+        public Titem()
         {
-            Markets = new HashSet<Market>();
+            Tmarkets = new HashSet<Tmarket>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
 
-        public virtual ICollection<Market> Markets { get; set; }
+        public virtual ICollection<Tmarket> Tmarkets { get; set; }
     }
 }
