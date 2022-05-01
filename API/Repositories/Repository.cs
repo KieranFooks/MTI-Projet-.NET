@@ -12,12 +12,14 @@ namespace API.Repositories
 		protected DbSet<DBEntity> _set;
 		protected Hotel_des_ventesContext _context;
 		protected readonly IMapper _mapper;
+		protected readonly ILogger _logger;
 
-		public Repository(Hotel_des_ventesContext context, IMapper mapper)
+		public Repository(Hotel_des_ventesContext context, IMapper mapper, ILogger logger)
 		{
 			_mapper = mapper;
 			_context = context;
 			_set = context.Set<DBEntity>();
+			_logger = logger;
 		}
 
 		public virtual async Task<bool> Delete(long idEntity)
@@ -25,7 +27,7 @@ namespace API.Repositories
 			throw new NotImplementedException();
 		}
 
-		public virtual async Task<IEnumerable<ModelEntity>> Get(string includeTables)
+		public virtual async Task<IEnumerable<ModelEntity>?> Get(string includeTables)
 		{
 			try
 			{
@@ -43,6 +45,7 @@ namespace API.Repositories
 			}
 			catch (Exception ex)
 			{
+				_logger.LogError("error on db", ex);
 				return null;
 			}
 		}
@@ -59,6 +62,7 @@ namespace API.Repositories
 			}
 			catch (Exception ex)
 			{
+				_logger.LogError("error on db", ex);
 				return null;
 			}
 		}

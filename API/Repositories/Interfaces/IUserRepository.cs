@@ -4,5 +4,6 @@
 	{
 		int Count();
 		Dbo.User? GetById(int id);
+		Dbo.User? GetByName(string name);
 	}
 }

@@ -35,5 +35,10 @@ namespace API.Services
 		{
 			return _userRepository.GetById(id);
 		}
+
+		public bool IsNameAvailable(string username)
+		{
+			return _userRepository.GetByName(username) == null;
+		}
 	}
 }
