@@ -61,7 +61,7 @@ namespace API.DataAccess
 
                 entity.Property(e => e.Description).HasColumnType("text");
 
-                entity.Property(e => e.Name).HasColumnType("text");
+                entity.Property(e => e.Name).HasMaxLength(100);
             });
 
             modelBuilder.Entity<Tmarket>(entity =>
@@ -93,9 +93,9 @@ namespace API.DataAccess
             {
                 entity.ToTable("TUser");
 
-                entity.Property(e => e.Name).HasColumnType("text");
+                entity.Property(e => e.Name).HasMaxLength(100);
 
-                entity.Property(e => e.Password).HasColumnType("text");
+                entity.Property(e => e.Password).HasMaxLength(100);
             });
 
             OnModelCreatingPartial(modelBuilder);
