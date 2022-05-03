@@ -2,6 +2,7 @@
 using API.Dbo;
 using API.Repositories.Interfaces;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
 {
@@ -28,7 +29,9 @@ namespace API.Repositories
 		{
 			try
 			{
-				DataAccess.Tuser? user = _set.FirstOrDefault(user => user.Id == id);
+				Tuser? user = _set
+					.AsNoTracking()
+					.FirstOrDefault(user => user.Id == id);
 				return _mapper.Map<User?>(user);
 			}
 			catch (Exception ex)
@@ -42,13 +45,42 @@ namespace API.Repositories
 		{
 			try
 			{
-				Tuser? user = _set.FirstOrDefault(user => user.Name.Equals(name));
+				Tuser? user = _set
+					.AsNoTracking()
+					.FirstOrDefault(user => user.Name.Equals(name));
 				return _mapper.Map<User?>(user);
 			}
 			catch (Exception ex)
 			{
 				_logger.LogError("error on db", ex);
 				return null;
+			}
+		}
+
+		public bool TransferUserMoney(int senderId, int receiverId, int money)
+		{
+			try
+			{
+				Tuser? sender = _set.FirstOrDefault(user => user.Id == senderId);
+				if (sender == null || sender.Money - money < 0)
+				{
+					return false;
+				}
+				Tuser? receiver = _set.FirstOrDefault(user => user.Id == receiverId);
+				if (receiver == null)
+				{
+					return false;
+				}
+
+				sender.Money -= money;
+				receiver.Money += money;
+				_context.SaveChanges();
+				return true;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError("error on db", ex);
+				return false;
 			}
 		}
 	}

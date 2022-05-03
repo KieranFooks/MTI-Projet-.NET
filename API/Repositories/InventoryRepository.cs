@@ -2,6 +2,7 @@
 using API.Dbo;
 using API.Repositories.Interfaces;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
 {
@@ -11,22 +12,19 @@ namespace API.Repositories
 		{
 		}
 
-		public int GetItemQuantityOfUser(int userId, int itemId)
+		public Inventory? GetUserItem(int userId, int itemId)
 		{
 			try
 			{
 				Tinventory? item = _set
+					.AsNoTracking()
 					.FirstOrDefault(x => x.IdUser == userId && x.IdItem == itemId);
-				if (item == null)
-				{
-					return 0;
-				}
-				return item.Quantity;
+				return _mapper.Map<Inventory>(item);
 			}
 			catch (Exception ex)
 			{
 				_logger.LogError("error on db", ex);
-				return -1;
+				return null;
 			}
 		}
 
@@ -34,7 +32,8 @@ namespace API.Repositories
 		{
 			try
 			{
-				var inventory = _set.FirstOrDefault(x => x.IdItem == item.IdItem && x.IdUser == item.IdUser);
+				var inventory = _set
+					.FirstOrDefault(x => x.IdItem == item.IdItem && x.IdUser == item.IdUser);
 				if (inventory != null)
 				{
 					inventory.Quantity = item.Quantity;

@@ -2,6 +2,7 @@
 using API.Dbo;
 using API.Repositories.Interfaces;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
 {
@@ -16,6 +17,7 @@ namespace API.Repositories
 			try
 			{
 				Tmarket? listing = _set
+					.AsNoTracking()
 					.FirstOrDefault(x => x.Id == id);
 				return _mapper.Map<Market?>(listing);
 			}
@@ -34,6 +36,7 @@ namespace API.Repositories
 					.Where(x => !x.IsSold)
 					.Where(x => x.IdItemNavigation.Name == itemName)
 					.OrderByDescending(x => x.Id)
+					.AsNoTracking()
 					.ToList();
 				return _mapper.Map<List<Market>>(listings);
 			}
@@ -52,6 +55,7 @@ namespace API.Repositories
 					.Where(x => !x.IsSold)
 					.Where(x => x.IdNavigation.Id == userId)
 					.OrderByDescending(x => x.Id)
+					.AsNoTracking()
 					.ToList();
 				return _mapper.Map<List<Market>>(listings);
 			}
@@ -69,6 +73,7 @@ namespace API.Repositories
 				List<Tmarket>? listings = _set
 					.Where(x => !x.IsSold)
 					.OrderByDescending(x => x.Id)
+					.AsNoTracking()
 					.ToList();
 				return _mapper.Map<List<Market>>(listings);
 			}
@@ -76,6 +81,27 @@ namespace API.Repositories
 			{
 				_logger.LogError("error on db", ex);
 				return null;
+			}
+		}
+
+		public bool RemoveListing(int id)
+		{
+			try
+			{
+				Tmarket? listing = _set.Find(id);
+				if (listing == null)
+				{
+					return false;
+				}
+
+				listing.IsSold = true;
+				_context.SaveChanges();
+				return true;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError("error on db", ex);
+				return false;
 			}
 		}
 	}

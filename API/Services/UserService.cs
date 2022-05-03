@@ -1,4 +1,5 @@
-﻿using API.Repositories.Interfaces;
+﻿using API.Dbo;
+using API.Repositories.Interfaces;
 using API.Services.Interfaces;
 
 namespace API.Services
@@ -31,7 +32,7 @@ namespace API.Services
 			return _userRepository.Count();
 		}
 
-		public Dbo.User? GetUserById(int id)
+		public User? GetUserById(int id)
 		{
 			return _userRepository.GetById(id);
 		}
@@ -39,6 +40,11 @@ namespace API.Services
 		public bool IsNameAvailable(string username)
 		{
 			return _userRepository.GetByName(username) == null;
+		}
+
+		public int? GetUserMoney(int userId)
+		{
+			return _userRepository.GetById(userId)?.Money;
 		}
 	}
 }
