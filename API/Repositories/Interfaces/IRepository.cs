@@ -6,6 +6,5 @@
 		Task<ModelEntity?> Insert(ModelEntity entity);
 		Task<ModelEntity> Update(ModelEntity entity);
 		Task<bool> Delete(long idEntity);
-
 	}
 }
