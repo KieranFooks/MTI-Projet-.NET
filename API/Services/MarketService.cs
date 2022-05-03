@@ -1,9 +1,10 @@
 ﻿using API.Dbo;
 using API.Repositories.Interfaces;
+using API.Services.Interfaces;
 
 namespace API.Services
 {
-	public class MarketService
+	public class MarketService: IMarketService
 	{
 		private readonly IMarketRepository _marketRepository;
 		public MarketService(IMarketRepository marketRepository)
@@ -11,7 +12,17 @@ namespace API.Services
 			_marketRepository = marketRepository;
 		}
 
-		IEnumerable<Market>? GetRecentOpenListings()
+		public Market? GetById(int id)
+		{
+			return _marketRepository.GetById(id);
+		}
+
+		public IEnumerable<Market>? GetOpenListingsByItemName(string itemName)
+		{
+			return _marketRepository.GetOpenListingsByItemName(itemName);
+		}
+
+		public IEnumerable<Market>? GetRecentOpenListings()
 		{
 			return _marketRepository.GetRecentOpenListings();
 		}
