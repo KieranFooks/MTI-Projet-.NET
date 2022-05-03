@@ -44,6 +44,24 @@ namespace API.Repositories
 			}
 		}
 
+		public IEnumerable<Market>? GetMarketHistoryByUserId(int userId)
+		{
+			try
+			{
+				List<Tmarket>? listings = _set
+					.Where(x => !x.IsSold)
+					.Where(x => x.IdNavigation.Id == userId)
+					.OrderByDescending(x => x.Id)
+					.ToList();
+				return _mapper.Map<List<Market>>(listings);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError("error on db", ex);
+				return null;
+			}
+		}
+
 		public IEnumerable<Market>? GetRecentOpenListings()
 		{
 			try

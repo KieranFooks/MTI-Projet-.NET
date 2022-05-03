@@ -17,6 +17,11 @@ namespace API.Services
 			return _marketRepository.GetById(id);
 		}
 
+		public IEnumerable<Market>? GetMarketHistoryByUserId(int userId)
+		{
+			return _marketRepository.GetMarketHistoryByUserId(userId);
+		}
+
 		public IEnumerable<Market>? GetOpenListingsByItemName(string itemName)
 		{
 			return _marketRepository.GetOpenListingsByItemName(itemName);
