@@ -5,7 +5,7 @@ namespace API.Services
 {
 	public class UserService: IUserService
 	{
-		private IUserRepository _userRepository;
+		private readonly IUserRepository _userRepository;
 
 		public UserService(IUserRepository userRepository)
 		{
@@ -28,7 +28,7 @@ namespace API.Services
 
 		public int GetNumberOfUsers()
 		{
-			return 0;
+			return _userRepository.Count();
 		}
 
 		public Dbo.User? GetUserById(int id)

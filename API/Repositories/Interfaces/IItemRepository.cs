@@ -1,6 +1,9 @@
-﻿namespace API.Repositories.Interfaces
+﻿using API.DataAccess;
+using API.Dbo;
+
+namespace API.Repositories.Interfaces
 {
-	public interface IItemRepository : IRepository<DataAccess.Titem, Dbo.Item>
+	public interface IItemRepository : IRepository<Titem, Item>
 	{
 	}
 }

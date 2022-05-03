@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using API.DataAccess;
+using API.Dbo;
+using AutoMapper;
 
 namespace API.Repositories
 {
@@ -6,17 +8,17 @@ namespace API.Repositories
 	{
 		public AutomapperProfiles()
 		{
-			CreateMap<DataAccess.Tinventory, Dbo.Inventory>();
-			CreateMap<Dbo.Inventory, DataAccess.Tinventory>();
+			CreateMap<Tinventory, Inventory>();
+			CreateMap<Inventory, Tinventory>();
 
-			CreateMap<DataAccess.Tuser, Dbo.User>();
-			CreateMap<Dbo.User, DataAccess.Tuser>();
+			CreateMap<Tuser, User>();
+			CreateMap<User, Tuser>();
 
-			CreateMap<DataAccess.Titem, Dbo.Item>();
-			CreateMap<Dbo.Item, DataAccess.Titem>();
+			CreateMap<Titem, Item>();
+			CreateMap<Item, Titem>();
 
-			CreateMap<DataAccess.Tmarket, Dbo.Market>();
-			CreateMap<Dbo.Market, DataAccess.Tmarket>();
+			CreateMap<Tmarket, Market>();
+			CreateMap<Market, Tmarket>();
 		}
 	}
 }

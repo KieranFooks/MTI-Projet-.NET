@@ -1,10 +1,11 @@
 ﻿using API.DataAccess;
+using API.Dbo;
 using API.Repositories.Interfaces;
 using AutoMapper;
 
 namespace API.Repositories
 {
-	public class UserRepository : Repository<DataAccess.Tuser, Dbo.User>, IUserRepository
+	public class UserRepository : Repository<Tuser, User>, IUserRepository
 	{
 		public UserRepository(Hotel_des_ventesContext context, IMapper mapper, ILogger<UserRepository> logger) : base(context, mapper, logger)
 		{
@@ -23,12 +24,12 @@ namespace API.Repositories
 			}
 		}
 
-		public Dbo.User? GetById(int id)
+		public User? GetById(int id)
 		{
 			try
 			{
 				DataAccess.Tuser? user = _set.FirstOrDefault(user => user.Id == id);
-				return _mapper.Map<Dbo.User?>(user);
+				return _mapper.Map<User?>(user);
 			}
 			catch (Exception ex)
 			{
@@ -37,12 +38,12 @@ namespace API.Repositories
 			}
 		}
 
-		public Dbo.User? GetByName(string name)
+		public User? GetByName(string name)
 		{
 			try
 			{
-				DataAccess.Tuser? user = _set.FirstOrDefault(user => user.Name.Equals(name));
-				return _mapper.Map<Dbo.User?>(user);
+				Tuser? user = _set.FirstOrDefault(user => user.Name.Equals(name));
+				return _mapper.Map<User?>(user);
 			}
 			catch (Exception ex)
 			{

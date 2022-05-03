@@ -1,6 +1,10 @@
-﻿namespace API.Repositories.Interfaces
+﻿using API.DataAccess;
+using API.Dbo;
+
+namespace API.Repositories.Interfaces
 {
-	public interface IMarketRepository : IRepository<DataAccess.Tmarket, Dbo.Market>
+	public interface IMarketRepository : IRepository<Tmarket, Market>
 	{
+		IEnumerable<Market>? GetRecentOpenListings();
 	}
 }

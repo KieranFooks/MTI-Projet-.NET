@@ -1,9 +1,12 @@
-﻿namespace API.Repositories.Interfaces
+﻿using API.DataAccess;
+using API.Dbo;
+
+namespace API.Repositories.Interfaces
 {
-	public interface IUserRepository : IRepository<DataAccess.Tuser, Dbo.User>
+	public interface IUserRepository : IRepository<Tuser, User>
 	{
 		int Count();
-		Dbo.User? GetById(int id);
-		Dbo.User? GetByName(string name);
+		User? GetById(int id);
+		User? GetByName(string name);
 	}
 }
