@@ -66,7 +66,7 @@ namespace API.Services
 			{
 				IdItem = itemId,
 				IdUser = userId,
-				Quantity = ownedItems - quantity
+				Quantity = item.Quantity - quantity
 			};
 			bool update = _inventoryRepository.UpdateQuantity(inventory);
 			if (!update)
