@@ -1,0 +1,49 @@
+﻿@model Hotel_des_ventes.Models.ProfileViewModel
+@{
+    ViewData["Title"] = "Items";
+}
+
+@*Alert if Viewbag.Error is not empty*@
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<h1>@Html.DisplayFor(Model => Model.Username) - @Html.DisplayFor(Model => Model.Money)$</h1>
+
+
+<ul class="nav nav-tabs" role="tablist" style="margin-top:30px">
+    <li class="nav-item">
+        <a class="nav-link active" asp-area="" asp-controller="Profile" asp-action="Items">Items</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Profile" asp-action="Announces">Announces</a>
+    </li>
+</ul>
+
+<table class="table" style="margin-top:30px">
+    <thead>
+        <tr>
+            <th style="width:10%">@Html.DisplayNameFor(Model => Model.Items.First().Name)</th>
+            <th style="width:40%">@Html.DisplayNameFor(Model => Model.Items.First().Description)</th>
+            <th style="width:5%">@Html.DisplayNameFor(Model => Model.Items.First().Quantity)</th>
+        </tr>
+    </thead>
+    @foreach(var item in Model.Items)
+    {
+        <tr style="height:50px">
+            <td>@Html.DisplayFor(ModelItem => item.Name)</td>
+            <td>@Html.DisplayFor(ModelItem => item.Description)</td>
+            <td>@Html.DisplayFor(ModelItem => item.Quantity)</td>
+        </tr>
+    }
+</table>
+
+<h2>Logout</h2>
+<br />
+@using(Html.BeginForm("Logout", "Profile", FormMethod.Post))
+{
+    <input type="submit" value="Logout">
+}
