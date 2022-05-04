@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*Alert if Viewbag.Error is not empty*@
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+
+<h1>Register</h1>
+<br/>
+
+
+@using (Html.BeginForm("Register", "Connection", FormMethod.Post))
+{ 
+    <table>
+        <tr>
+            <td>Enter Username: </td>            
+            <td>@Html.TextBox("Username")</td>
+        </tr>
+        <tr>
+            <td>Enter Password: </td>
+            <td>@Html.TextBox("Password")</td>
+        </tr>
+        <tr>
+            <td>Confirm Password: </td>
+            <td>@Html.TextBox("ConfirmedPassword")</td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Register"></td>
+        </tr>
+    </table>
+}

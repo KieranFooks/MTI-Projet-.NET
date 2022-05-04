@@ -4,19 +4,22 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h1>Login</h1>
+<br/>
+
 @using (Html.BeginForm("Login", "Connection", FormMethod.Post))
 { 
     <table>
         <tr>
-            <td>Enter ID: </td>            
-            <td>@Html.TextBox("Id")</td>
+            <td>Enter Username: </td>            
+            <td>@Html.TextBox("Username")</td>
         </tr>
         <tr>
             <td>Enter Password: </td>
             <td>@Html.TextBox("Password")</td>
         </tr>
         <tr>
-            <td colspan="2"><input type="submit" value="Submit"></td>
+            <td colspan="2"><input type="submit" value="Login"></td>
         </tr>
     </table>
 }
