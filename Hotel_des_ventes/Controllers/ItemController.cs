@@ -10,7 +10,7 @@ namespace Hotel_des_ventes.Controllers
             if (Request.Cookies["UserID"] == null)
                 return RedirectToAction("Login", "Connection", new { AnnounceID = AnnounceID });
             if (errorMessage != null)
-                ViewBag.ErrorMessage = errorMessage;
+                ViewBag.Error = errorMessage;
 
             ItemOfferModel itemOfferModel = new ItemOfferModel() { Id = AnnounceID, Name = "Item 1", Price = 100, Quantity = 10, Seller = "Seller 1" };
             return View(itemOfferModel);
