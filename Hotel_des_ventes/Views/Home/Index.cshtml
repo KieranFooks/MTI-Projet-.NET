@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Hotel_des_ventes.Models.MarketAvailableItemsViewModel>
+﻿@model Hotel_des_ventes.Models.HomeViewModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -12,16 +12,23 @@
     <h1 class="display-4">Auction House</h1>
 </div>
 
+@using(Html.BeginForm("Index", "Home", FormMethod.Get))
+{
+  <label>Select a specific item: </label>
+  var list = new SelectList(Model.Items, "Id", "Name", Model.selectedItem);
+  @Html.DropDownList("itemId", list, new { onchange = "this.form.submit();" });
+}
+
 <table class="table">
     <thead>
         <tr>
-            <th style="width:50%">@Html.DisplayNameFor(Model => Model.Item)</th>
-            <th style="width:10%">@Html.DisplayNameFor(Model => Model.Price)</th>
-            <th style="width:10%">@Html.DisplayNameFor(Model => Model.Quantity)</th>
-            <th style="width:30%">@Html.DisplayNameFor(Model => Model.Seller)</th>
+            <th style="width:50%">@Html.DisplayNameFor(Model => Model.Announces.First().Item)</th>
+            <th style="width:10%">@Html.DisplayNameFor(Model => Model.Announces.First().Price)</th>
+            <th style="width:10%">@Html.DisplayNameFor(Model => Model.Announces.First().Quantity)</th>
+            <th style="width:30%">@Html.DisplayNameFor(Model => Model.Announces.First().Seller)</th>
         </tr>
     </thead>
-    @foreach(var item in Model)
+    @foreach (var item in Model.Announces)
     {
         <tr style="height:50px" onclick="location.href = '@(Url.Action("Index","Item", new { AnnounceID = item.Id }))'">
             <td>@Html.DisplayFor(ModelItem => item.Item)</td>
