@@ -17,6 +17,8 @@ namespace API.Repositories
 			try
 			{
 				Tmarket? listing = _set
+					.Include(x => x.IdNavigation)
+					.Include(x => x.IdItemNavigation)
 					.AsNoTracking()
 					.FirstOrDefault(x => x.Id == id);
 				return _mapper.Map<Market?>(listing);
@@ -56,6 +58,8 @@ namespace API.Repositories
 				List<Tmarket>? listings = _set
 					.Where(x => x.IdNavigation.Id == userId)
 					.OrderByDescending(x => x.Id)
+					.Include(x => x.IdNavigation)
+					.Include(x => x.IdItemNavigation)
 					.AsNoTracking()
 					.ToList();
 				return _mapper.Map<List<Market>>(listings);
@@ -75,6 +79,8 @@ namespace API.Repositories
 					.Where(x => !x.IsSold)
 					.OrderByDescending(x => x.Id)
 					.Take(10)
+					.Include(x => x.IdNavigation)
+					.Include(x => x.IdItemNavigation)
 					.AsNoTracking()
 					.ToList();
 				return _mapper.Map<List<Market>>(listings);
