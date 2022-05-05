@@ -15,7 +15,13 @@ namespace Hotel_des_ventes.Controllers
 
         public IActionResult Login(int? AnnounceID)
         {
+            TempData.Remove("AnnounceID");
             TempData.Add("AnnounceID", AnnounceID);
+            return View();
+        }
+
+        public IActionResult Register()
+        {
             return View();
         }
 
@@ -24,14 +30,49 @@ namespace Hotel_des_ventes.Controllers
         public IActionResult Login(IFormCollection fc)
         {
             //add verif mdp et userId
-            if (ModelState.IsValid)
+            if (string.IsNullOrEmpty(fc["Username"]) || string.IsNullOrEmpty(fc["Password"]))
             {
-                DateTimeOffset dateTime = DateTimeOffset.Now;
-                dateTime = dateTime.AddDays(1);
-                CookieOptions option = new CookieOptions();
-                option.Expires = dateTime;
-                Response.Cookies.Append("UserID", fc["Id"], option);
+                ViewBag.Error = "Please complete all fields";
+                return View();
             }
+                
+            DateTimeOffset dateTime = DateTimeOffset.Now;
+            dateTime = dateTime.AddDays(1);
+            CookieOptions option = new CookieOptions();
+            option.Expires = dateTime;
+            Response.Cookies.Append("UserID", fc["Username"], option);
+            
+            if (TempData["AnnounceID"] != null)
+            {
+                var AnnounceID = TempData["AnnounceID"];
+                TempData.Remove("AnnounceID");
+                return RedirectToAction("Index", "Item", new { AnnounceID = AnnounceID });
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Register(IFormCollection fc)
+        {
+            //add verif mdp et userId
+            if (string.IsNullOrEmpty(fc["Username"]) || string.IsNullOrEmpty(fc["Password"]))
+            {
+                ViewBag.Error = "Please complete all fields";
+                return View();
+            }
+            if (fc["Password"] != fc["ConfirmedPassword"])
+            {
+                ViewBag.Error = "Veuillez remplir tous les champs";
+                return View();
+
+            }
+            DateTimeOffset dateTime = DateTimeOffset.Now;
+            dateTime = dateTime.AddDays(1);
+            CookieOptions option = new CookieOptions();
+            option.Expires = dateTime;
+            Response.Cookies.Append("UserID", fc["Username"], option);
+
             if (TempData["AnnounceID"] != null)
             {
                 var AnnounceID = TempData["AnnounceID"];
