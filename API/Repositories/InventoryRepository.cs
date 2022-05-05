@@ -33,7 +33,9 @@ namespace API.Repositories
 			try
 			{
 				var inventory = _set
-					.FirstOrDefault(x => x.IdItem == item.IdItem && x.IdUser == item.IdUser);
+					.Where(x => x.IdItem == item.IdItem)
+					.Where(x => x.IdUser == item.IdUser)
+					.FirstOrDefault();
 				if (inventory != null)
 				{
 					inventory.Quantity = item.Quantity;
@@ -47,6 +49,24 @@ namespace API.Repositories
 			{
 				_logger.LogError("error on db", ex);
 				return false;
+			}
+		}
+
+		public IEnumerable<Inventory>? GetUserInventory(int userId)
+		{
+			try
+			{
+				List<Tinventory>? item = _set
+					.Where(x => x.IdUser == userId)
+					.Where(x => x.Quantity != 0)
+					.AsNoTracking()
+					.ToList();
+				return _mapper.Map<List<Inventory>>(item);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError("error on db", ex);
+				return null;
 			}
 		}
 	}

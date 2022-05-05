@@ -17,7 +17,8 @@ builder.Services.AddTransient<IMarketRepository, MarketRepository>();
 builder.Services.AddTransient<IInventoryRepository, InventoryRepository>();
 
 builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IMarketRepository, MarketRepository>();
+builder.Services.AddTransient<IMarketService, MarketService>();
+builder.Services.AddTransient<IItemService, ItemService>();
 
 var app = builder.Build();
 

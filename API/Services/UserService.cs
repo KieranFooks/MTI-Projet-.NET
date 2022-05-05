@@ -13,7 +13,7 @@ namespace API.Services
 			_userRepository = userRepository;
 		}
 
-		public async Task<Dbo.User?> CreateUser(string username, string password)
+		public async Task<User?> CreateUser(string username, string password)
 		{
 			var user = new Dbo.User
 			{
@@ -51,5 +51,7 @@ namespace API.Services
 		{
 			return _userRepository.GetUserByNameAndPassword(name, password);
 		}
+
+		
 	}
 }
