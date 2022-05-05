@@ -12,7 +12,12 @@ builder.Services.AddDbContext<API.DataAccess.Hotel_des_ventesContext>();
 builder.Services.AddAutoMapper(typeof(API.Repositories.AutomapperProfiles));
 
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IItemRepository, ItemRepository>();
+builder.Services.AddTransient<IMarketRepository, MarketRepository>();
+builder.Services.AddTransient<IInventoryRepository, InventoryRepository>();
+
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IMarketRepository, MarketRepository>();
 
 var app = builder.Build();
 
