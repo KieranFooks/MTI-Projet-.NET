@@ -46,5 +46,10 @@ namespace API.Services
 		{
 			return _userRepository.GetById(userId)?.Money;
 		}
+
+		public User? Connect(string name, string password)
+		{
+			return _userRepository.GetUserByNameAndPassword(name, password);
+		}
 	}
 }

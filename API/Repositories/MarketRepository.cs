@@ -8,7 +8,7 @@ namespace API.Repositories
 {
 	public class MarketRepository : Repository<Tmarket, Market>, IMarketRepository
 	{
-		public MarketRepository(Hotel_des_ventesContext context, IMapper mapper, ILogger<UserRepository> logger) : base(context, mapper, logger)
+		public MarketRepository(Hotel_des_ventesContext context, IMapper mapper, ILogger<MarketRepository> logger) : base(context, mapper, logger)
 		{
 		}
 
