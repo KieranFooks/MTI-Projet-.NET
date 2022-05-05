@@ -9,5 +9,6 @@ namespace API.Services.Interfaces
 		User? GetUserById(int id);
 		bool IsNameAvailable(string name);
 		User? Connect(string name, string password);
+		public IEnumerable<Inventory>? GetUserInventory(int userId);
 	}
 }

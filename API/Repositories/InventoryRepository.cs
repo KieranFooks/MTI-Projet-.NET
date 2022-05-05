@@ -8,7 +8,7 @@ namespace API.Repositories
 {
 	public class InventoryRepository : Repository<Tinventory, Inventory>, IInventoryRepository
 	{
-		public InventoryRepository(Hotel_des_ventesContext context, IMapper mapper, ILogger<UserRepository> logger) : base(context, mapper, logger)
+		public InventoryRepository(Hotel_des_ventesContext context, IMapper mapper, ILogger<InventoryRepository> logger) : base(context, mapper, logger)
 		{
 		}
 
