@@ -62,6 +62,27 @@ namespace API.DataAccess
                 entity.Property(e => e.Description).HasColumnType("text");
 
                 entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.HasData(new Titem
+                {
+                    Id = 1,
+                    Name = "Palantír",
+                    Description = "Used for communication and to see events, whether past or future.",
+                });
+
+                entity.HasData(new Titem
+                {
+                    Id = 2,
+                    Name = "Lightsaber",
+                    Description = "Luminescent plasma blade, can cut steel.",
+                });
+
+                entity.HasData(new Titem
+                {
+                    Id = 3,
+                    Name = "Mug",
+                    Description = "Use it to transport a small amount of fluid, like coffee.",
+                });
             });
 
             modelBuilder.Entity<Tmarket>(entity =>
