@@ -9,6 +9,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Databa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{9EB30A46-C63C-4EAD-A0F0-9CB039C2E4EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit tests", "Unit tests\Unit tests.csproj", "{D3ECA955-4C44-4355-8CD8-EA3A09EE39E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{9EB30A46-C63C-4EAD-A0F0-9CB039C2E4EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EB30A46-C63C-4EAD-A0F0-9CB039C2E4EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EB30A46-C63C-4EAD-A0F0-9CB039C2E4EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3ECA955-4C44-4355-8CD8-EA3A09EE39E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3ECA955-4C44-4355-8CD8-EA3A09EE39E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3ECA955-4C44-4355-8CD8-EA3A09EE39E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3ECA955-4C44-4355-8CD8-EA3A09EE39E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
