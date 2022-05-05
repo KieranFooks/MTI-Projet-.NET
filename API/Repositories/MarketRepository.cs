@@ -52,7 +52,6 @@ namespace API.Repositories
 			try
 			{
 				List<Tmarket>? listings = _set
-					.Where(x => !x.IsSold)
 					.Where(x => x.IdNavigation.Id == userId)
 					.OrderByDescending(x => x.Id)
 					.AsNoTracking()
@@ -73,6 +72,7 @@ namespace API.Repositories
 				List<Tmarket>? listings = _set
 					.Where(x => !x.IsSold)
 					.OrderByDescending(x => x.Id)
+					.Take(10)
 					.AsNoTracking()
 					.ToList();
 				return _mapper.Map<List<Market>>(listings);

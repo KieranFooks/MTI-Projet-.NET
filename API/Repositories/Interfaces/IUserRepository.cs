@@ -8,6 +8,7 @@ namespace API.Repositories.Interfaces
 		int Count();
 		User? GetById(int id);
 		User? GetByName(string name);
-		public bool TransferUserMoney(int senderId, int receiverId, int money);
+		bool TransferUserMoney(int senderId, int receiverId, int money);
+		User? GetUserByNameAndPassword(string username, string password);
 	}
 }

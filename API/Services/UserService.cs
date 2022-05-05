@@ -7,13 +7,15 @@ namespace API.Services
 	public class UserService: IUserService
 	{
 		private readonly IUserRepository _userRepository;
+		private readonly IInventoryRepository _inventoryRepository;
 
-		public UserService(IUserRepository userRepository)
+		public UserService(IUserRepository userRepository, IInventoryRepository inventoryRepository)
 		{
 			_userRepository = userRepository;
+			_inventoryRepository = inventoryRepository;
 		}
 
-		public async Task<Dbo.User?> CreateUser(string username, string password)
+		public async Task<User?> CreateUser(string username, string password)
 		{
 			var user = new Dbo.User
 			{
@@ -45,6 +47,16 @@ namespace API.Services
 		public int? GetUserMoney(int userId)
 		{
 			return _userRepository.GetById(userId)?.Money;
+		}
+
+		public User? Connect(string name, string password)
+		{
+			return _userRepository.GetUserByNameAndPassword(name, password);
+		}
+
+		public IEnumerable<Inventory>? GetUserInventory(int userId)
+		{
+			return _inventoryRepository.GetUserInventory(userId);
 		}
 	}
 }

@@ -57,6 +57,24 @@ namespace API.Repositories
 			}
 		}
 
+		public User? GetUserByNameAndPassword(string username, string password)
+		{
+			try
+			{
+				Tuser? user = _set
+					.AsNoTracking()
+					.Where(user => user.Name.Equals(username))
+					.Where(user => user.Password.Equals(password))
+					.FirstOrDefault();
+				return _mapper.Map<User?>(user);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError("error on db", ex);
+				return null;
+			}
+		}
+
 		public bool TransferUserMoney(int senderId, int receiverId, int money)
 		{
 			try
