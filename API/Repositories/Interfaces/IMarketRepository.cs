@@ -7,7 +7,7 @@ namespace API.Repositories.Interfaces
 	{
 		IEnumerable<Market>? GetRecentOpenListings();
 		Market? GetById(int id);
-		IEnumerable<Market>? GetOpenListingsByItemName(string itemName);
+		IEnumerable<Market>? GetOpenListingsByItemId(int itemId);
 		IEnumerable<Market>? GetMarketHistoryByUserId(int userId);
 		public bool RemoveListing(int id);
 	}

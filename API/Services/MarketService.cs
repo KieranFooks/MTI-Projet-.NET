@@ -27,9 +27,9 @@ namespace API.Services
 			return _marketRepository.GetMarketHistoryByUserId(userId);
 		}
 
-		public IEnumerable<Market>? GetOpenListingsByItemName(string itemName)
+		public IEnumerable<Market>? GetOpenListingsByItemId(int itemId)
 		{
-			return _marketRepository.GetOpenListingsByItemName(itemName);
+			return _marketRepository.GetOpenListingsByItemId(itemId);
 		}
 
 		public IEnumerable<Market>? GetRecentOpenListings()

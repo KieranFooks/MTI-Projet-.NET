@@ -28,13 +28,13 @@ namespace API.Repositories
 			}
 		}
 
-		public IEnumerable<Market>? GetOpenListingsByItemName(string itemName)
+		public IEnumerable<Market>? GetOpenListingsByItemId(int itemId)
 		{
 			try
 			{
 				List<Tmarket>? listings = _set
 					.Where(x => !x.IsSold)
-					.Where(x => x.IdItemNavigation.Name == itemName)
+					.Where(x => x.IdItem == itemId)
 					.OrderByDescending(x => x.Id)
 					.Include(x => x.IdNavigation)
 					.Include(x => x.IdItemNavigation)
