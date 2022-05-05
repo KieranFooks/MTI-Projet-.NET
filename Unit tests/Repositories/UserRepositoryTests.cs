@@ -64,7 +64,14 @@ namespace Unit_tests.Repositories
 			var context = new Hotel_des_ventesContext(options);
 			var mapper = new Mapper(new MapperConfiguration(cfg =>
 			{
+				cfg.CreateMap<Tinventory, Inventory>();
+				cfg.CreateMap<Inventory, Tinventory>();
 				cfg.CreateMap<Tuser, User>();
+				cfg.CreateMap<User, Tuser>();
+				cfg.CreateMap<Titem, Item>();
+				cfg.CreateMap<Item, Titem>();
+				cfg.CreateMap<Tmarket, Market>();
+				cfg.CreateMap<Market, Tmarket>();
 			}));
 			var logger = Mock.Of<ILogger<UserRepository>>();
 

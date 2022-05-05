@@ -69,5 +69,22 @@ namespace API.Repositories
 				return null;
 			}
 		}
+
+		public override async Task<Inventory?> Insert(Inventory entity)
+		{
+			Tinventory dbEntity = _mapper.Map<Tinventory>(entity);
+			_set.Add(dbEntity);
+			try
+			{
+				await _context.SaveChangesAsync();
+				Inventory newEntity = _mapper.Map<Inventory>(dbEntity);
+				return newEntity;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError("error on db", ex);
+				return null;
+			}
+		}
 	}
 }
