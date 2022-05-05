@@ -169,7 +169,7 @@ namespace Unit_tests.Repositories
 		{
 			var amount = 100;
 			var senderId = 42;
-			var receiverId = 2;
+			var receiverId = 1;
 
 			var repo = GetRepo();
 			var transfer = repo.TransferUserMoney(senderId, receiverId, amount);
@@ -179,7 +179,7 @@ namespace Unit_tests.Repositories
 			var receiver = repo.GetById(receiverId);
 
 			Assert.NotNull(receiver);
-			Assert.Equal(0, receiver!.Money);
+			Assert.Equal(4242, receiver!.Money);
 		}
 
 		[Fact]
