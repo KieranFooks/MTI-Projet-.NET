@@ -18,7 +18,11 @@ namespace API.Repositories
 			{
 				Tinventory? item = _set
 					.AsNoTracking()
-					.FirstOrDefault(x => x.IdUser == userId && x.IdItem == itemId);
+					.Where(x => x.IdUser == userId)
+					.Where(x => x.IdItem == itemId)
+					.Include(x => x.IdUserNavigation)
+					.Include(x => x.IdItemNavigation)
+					.FirstOrDefault();
 				return _mapper.Map<Inventory>(item);
 			}
 			catch (Exception ex)
@@ -59,6 +63,8 @@ namespace API.Repositories
 				List<Tinventory>? item = _set
 					.Where(x => x.IdUser == userId)
 					.Where(x => x.Quantity != 0)
+					.Include(x => x.IdUserNavigation)
+					.Include(x => x.IdItemNavigation)
 					.AsNoTracking()
 					.ToList();
 				return _mapper.Map<List<Inventory>>(item);
