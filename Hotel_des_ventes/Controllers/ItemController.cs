@@ -16,9 +16,39 @@ namespace Hotel_des_ventes.Controllers
             return View(itemOfferModel);
         }
 
+        public IActionResult SellItem(int itemId)
+        {
+            if (Request.Cookies["UserID"] == null)
+                return RedirectToAction("Login", "Connection");
+            var sellItem = new SellItemViewModel() { Id = itemId, Name = "Item 1", AveragePrice= 50 };
+            return View(sellItem);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Buy(IFormCollection fc)
+        public IActionResult SellItem(string price, string quantity, int itemId)
+        {
+            if (string.IsNullOrEmpty(price) || string.IsNullOrEmpty(quantity))
+            {
+                ViewBag.Error = "Please fill all the fields";
+                return SellItem(itemId);
+            }
+            try
+            {
+                int quantityValue = int.Parse(quantity);
+                int priceValue = int.Parse(price);
+            }
+            catch
+            {
+                ViewBag.Error = "Please fill the area with numbers";
+                return SellItem(itemId);
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Buy(int itemId)
         {
             //TODO: Check if the user as enough money
             //if ()

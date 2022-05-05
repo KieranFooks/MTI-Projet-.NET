@@ -12,12 +12,25 @@
     <h1 class="display-4">Auction House</h1>
 </div>
 
+<span style="float:left">
 @using(Html.BeginForm("Index", "Home", FormMethod.Get))
 {
-  <label>Select a specific item: </label>
-  var list = new SelectList(Model.Items, "Id", "Name", Model.selectedItem);
-  @Html.DropDownList("itemId", list, new { onchange = "this.form.submit();" });
+    var list = new SelectList(Model.Items, "Id", "Name", Model.selectedItem);
+    <label>Select a specific item: </label>
+    @Html.DropDownList("itemId", list, new { onchange = "this.form.submit();" })
 }
+</span>
+@if (Model.selectedItem != -1)
+{
+    <span style="float:right;">
+        @using(Html.BeginForm("SellItem", "Item", FormMethod.Get))
+        {
+            <input type="hidden" name="itemId" value="@Model.selectedItem" />
+            <input type="submit" value="Sell Item">
+        }
+    </span>
+}
+    
 
 <table class="table">
     <thead>

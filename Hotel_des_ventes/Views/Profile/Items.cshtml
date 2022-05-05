@@ -29,6 +29,7 @@
             <th style="width:10%">@Html.DisplayNameFor(Model => Model.Items.First().Name)</th>
             <th style="width:40%">@Html.DisplayNameFor(Model => Model.Items.First().Description)</th>
             <th style="width:5%">@Html.DisplayNameFor(Model => Model.Items.First().Quantity)</th>
+            <th style="width:10%">Sell</th>
         </tr>
     </thead>
     @foreach(var item in Model.Items)
@@ -37,6 +38,7 @@
             <td>@Html.DisplayFor(ModelItem => item.Name)</td>
             <td>@Html.DisplayFor(ModelItem => item.Description)</td>
             <td>@Html.DisplayFor(ModelItem => item.Quantity)</td>
+            <td>@using(Html.BeginForm("SellItem", "Item", FormMethod.Get)){ <input type="hidden" name="itemId" value="@item.Id"/> <input type="submit" value="Sell"> }</td>
         </tr>
     }
 </table>

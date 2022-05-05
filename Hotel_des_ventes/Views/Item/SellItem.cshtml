@@ -1,0 +1,44 @@
+﻿@model Hotel_des_ventes.Models.SellItemViewModel
+
+@{
+    ViewData["Title"] = "SellItem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/SellItem.css" asp-append-version="true" />
+
+
+@*Alert if Viewbag.Error is not empty*@
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<h1>Sell an Item</h1>
+<br/>
+<br/>
+
+@using (Html.BeginForm("SellItem", "Item", FormMethod.Post))
+{
+    <input type="hidden" name="itemId" value="@Model.Id" />
+    <table>
+        <tr>
+            <td>Item: </td>            
+            <td>@Html.DisplayFor(model => model.Name)</td>
+        </tr>
+        <tr>
+            <td>Quantity: </td>
+            <td>@Html.TextBox("Quantity")</td>
+        </tr>    
+        <tr>
+            <td>Price: </td>
+            <td>@Html.TextBox("Price") - Average Price: @Html.DisplayFor(model => model.AveragePrice)$</td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Sell"></td>
+        </tr>
+</table>
+}
+

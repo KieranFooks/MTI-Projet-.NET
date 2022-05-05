@@ -27,10 +27,10 @@ namespace Hotel_des_ventes.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(IFormCollection fc)
+        public IActionResult Login(string Username, string Password)
         {
             //add verif mdp et userId
-            if (string.IsNullOrEmpty(fc["Username"]) || string.IsNullOrEmpty(fc["Password"]))
+            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
             {
                 ViewBag.Error = "Please complete all fields";
                 return View();
@@ -40,7 +40,7 @@ namespace Hotel_des_ventes.Controllers
             dateTime = dateTime.AddDays(1);
             CookieOptions option = new CookieOptions();
             option.Expires = dateTime;
-            Response.Cookies.Append("UserID", fc["Username"], option);
+            Response.Cookies.Append("UserID", Username, option);
             
             if (TempData["AnnounceID"] != null)
             {
@@ -53,15 +53,15 @@ namespace Hotel_des_ventes.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(IFormCollection fc)
+        public IActionResult Register(string Username, string Password, string ConfirmedPassword)
         {
             //add verif mdp et userId
-            if (string.IsNullOrEmpty(fc["Username"]) || string.IsNullOrEmpty(fc["Password"]))
+            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
             {
                 ViewBag.Error = "Please complete all fields";
                 return View();
             }
-            if (fc["Password"] != fc["ConfirmedPassword"])
+            if (Password != ConfirmedPassword)
             {
                 ViewBag.Error = "Veuillez remplir tous les champs";
                 return View();
@@ -71,7 +71,7 @@ namespace Hotel_des_ventes.Controllers
             dateTime = dateTime.AddDays(1);
             CookieOptions option = new CookieOptions();
             option.Expires = dateTime;
-            Response.Cookies.Append("UserID", fc["Username"], option);
+            Response.Cookies.Append("UserID", Username, option);
 
             if (TempData["AnnounceID"] != null)
             {
