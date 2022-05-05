@@ -1,8 +1,53 @@
-﻿@{
+﻿@model Hotel_des_ventes.Models.HomeViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<head>
+    <link rel="stylesheet" href="~/css/index.css" />
+</head>
+
+<div class="text-center" style="margin-bottom: 70px">
+    <h1 class="display-4">Auction House</h1>
 </div>
+
+<span style="float:left">
+@using(Html.BeginForm("Index", "Home", FormMethod.Get))
+{
+    var list = new SelectList(Model.Items, "Id", "Name", Model.selectedItem);
+    <label>Select a specific item: </label>
+    @Html.DropDownList("itemId", list, new { onchange = "this.form.submit();" })
+}
+</span>
+@if (Model.selectedItem != -1)
+{
+    <span style="float:right;">
+        @using(Html.BeginForm("SellItem", "Item", FormMethod.Get))
+        {
+            <input type="hidden" name="itemId" value="@Model.selectedItem" />
+            <input class="btn btn-primary" type="submit" value="Sell Item">
+        }
+    </span>
+}
+    
+
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width:50%">@Html.DisplayNameFor(Model => Model.Announces.First().Item)</th>
+            <th style="width:10%">@Html.DisplayNameFor(Model => Model.Announces.First().Price)</th>
+            <th style="width:10%">@Html.DisplayNameFor(Model => Model.Announces.First().Quantity)</th>
+            <th style="width:30%">@Html.DisplayNameFor(Model => Model.Announces.First().Seller)</th>
+        </tr>
+    </thead>
+    @foreach (var item in Model.Announces)
+    {
+        <tr style="height:50px; cursor:pointer" onclick="location.href = '@(Url.Action("Index","Item", new { AnnounceID = item.Id }))'">
+            <td>@Html.DisplayFor(ModelItem => item.Item)</td>
+            <td>@Html.DisplayFor(ModelItem => item.Price)</td>
+            <td>@Html.DisplayFor(ModelItem => item.Quantity)</td>
+            <td>@Html.DisplayFor(ModelItem => item.Seller)</td>
+        </tr>
+    }
+</table>
