@@ -36,6 +36,8 @@ namespace API.Repositories
 					.Where(x => !x.IsSold)
 					.Where(x => x.IdItemNavigation.Name == itemName)
 					.OrderByDescending(x => x.Id)
+					.Include(x => x.IdNavigation)
+					.Include(x => x.IdItemNavigation)
 					.AsNoTracking()
 					.ToList();
 				return _mapper.Map<List<Market>>(listings);
