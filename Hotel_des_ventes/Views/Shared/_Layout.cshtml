@@ -39,6 +39,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Items">Profile</a>
                             </li>
+                            @if (ViewBag.Money != null)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark">@(ViewBag.Money)$</a>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>

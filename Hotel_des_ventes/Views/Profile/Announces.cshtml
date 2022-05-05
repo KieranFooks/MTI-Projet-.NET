@@ -12,7 +12,7 @@
     </div>
 }
 
-<h1>@Html.DisplayFor(Model => Model.Username) - @Html.DisplayFor(Model => Model.Money)$</h1>
+<h1>@Html.DisplayFor(Model => Model.Username)</h1>
 
 
 <ul class="nav nav-tabs" role="tablist" style="margin-top:30px">
@@ -46,7 +46,46 @@
 <h2>Logout</h2>
 <br />
 
-@using(Html.BeginForm("Logout", "Profile", FormMethod.Post))
-{
-    <input type="submit" value="Logout">
+
+
+@*Button onclick open modal*@
+<button type="button" class="btn btn-primary" onclick="ConfirmLogout()">
+    Logout
+</button>
+
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Logout</h3>
+            </div>
+            <div class="modal-body">
+                <h4>Are you sure you want to logout?</h4>
+            </div>
+            
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" onclick="CloseModal()">Cancel</a>
+                @using(Html.BeginForm("Logout", "Profile", FormMethod.Post))
+                {
+                    <input class="btn btn-primary" type="submit" value="Confirm">
+                }
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section scripts{
+    <script>
+        var ConfirmLogout = function () {
+            $("#myModal").modal('show');
+        }
+        var CloseModal = function () {
+            $("#myModal").modal('hide');
+        }
+    </script>
 }

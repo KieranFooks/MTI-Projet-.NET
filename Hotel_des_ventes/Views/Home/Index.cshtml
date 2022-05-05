@@ -26,7 +26,7 @@
         @using(Html.BeginForm("SellItem", "Item", FormMethod.Get))
         {
             <input type="hidden" name="itemId" value="@Model.selectedItem" />
-            <input type="submit" value="Sell Item">
+            <input class="btn btn-primary" type="submit" value="Sell Item">
         }
     </span>
 }
@@ -43,7 +43,7 @@
     </thead>
     @foreach (var item in Model.Announces)
     {
-        <tr style="height:50px" onclick="location.href = '@(Url.Action("Index","Item", new { AnnounceID = item.Id }))'">
+        <tr style="height:50px; cursor:pointer" onclick="location.href = '@(Url.Action("Index","Item", new { AnnounceID = item.Id }))'">
             <td>@Html.DisplayFor(ModelItem => item.Item)</td>
             <td>@Html.DisplayFor(ModelItem => item.Price)</td>
             <td>@Html.DisplayFor(ModelItem => item.Quantity)</td>

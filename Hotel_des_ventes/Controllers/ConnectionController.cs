@@ -63,7 +63,7 @@ namespace Hotel_des_ventes.Controllers
             }
             if (Password != ConfirmedPassword)
             {
-                ViewBag.Error = "Veuillez remplir tous les champs";
+                ViewBag.Error = "Passwords do not match";
                 return View();
 
             }

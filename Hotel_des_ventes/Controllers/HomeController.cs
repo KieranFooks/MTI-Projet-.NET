@@ -15,6 +15,11 @@ namespace Hotel_des_ventes.Controllers
 
         public IActionResult Index(int? itemId)
         {
+            if (Request.Cookies["UserID"] != null)
+            {
+                ViewBag.Money = "5000";
+            }
+            
             var items = new List<ItemViewModel>();
             items.Add(new ItemViewModel() { Id = -1, Name = "None" });
 

@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link rel="stylesheet" href="~/css/spaceBetweenRows.css" asp-append-version="true" />
+
+
 @*Alert if Viewbag.Error is not empty*@
 @if (ViewBag.Error != null)
 {
@@ -27,7 +30,7 @@
             <td>@Html.TextBox("Password")</td>
         </tr>
         <tr>
-            <td colspan="2"><input type="submit" value="Login"></td>
+            <td colspan="2"><input class="btn btn-primary" type="submit" value="Login"></td>
         </tr>
     </table>
 }
