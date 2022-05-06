@@ -7,6 +7,7 @@ namespace API.DataAccess
     {
         public Titem()
         {
+            Tinventories = new HashSet<Tinventory>();
             Tmarkets = new HashSet<Tmarket>();
         }
 
@@ -14,6 +15,7 @@ namespace API.DataAccess
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
 
+        public virtual ICollection<Tinventory> Tinventories { get; set; }
         public virtual ICollection<Tmarket> Tmarkets { get; set; }
     }
 }

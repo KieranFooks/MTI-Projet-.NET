@@ -17,7 +17,7 @@ namespace API.Repositories
 			try
 			{
 				Tmarket? listing = _set
-					.Include(x => x.IdNavigation)
+					.Include(x => x.IdSellerNavigation)
 					.Include(x => x.IdItemNavigation)
 					.AsNoTracking()
 					.FirstOrDefault(x => x.Id == id);
@@ -38,7 +38,7 @@ namespace API.Repositories
 					.Where(x => !x.IsSold)
 					.Where(x => x.IdItem == itemId)
 					.OrderByDescending(x => x.Id)
-					.Include(x => x.IdNavigation)
+					.Include(x => x.IdSellerNavigation)
 					.Include(x => x.IdItemNavigation)
 					.AsNoTracking()
 					.ToList();
@@ -56,9 +56,9 @@ namespace API.Repositories
 			try
 			{
 				List<Tmarket>? listings = _set
-					.Where(x => x.IdNavigation.Id == userId)
+					.Where(x => x.IdSeller == userId)
 					.OrderByDescending(x => x.Id)
-					.Include(x => x.IdNavigation)
+					.Include(x => x.IdSellerNavigation)
 					.Include(x => x.IdItemNavigation)
 					.AsNoTracking()
 					.ToList();
@@ -79,7 +79,7 @@ namespace API.Repositories
 					.Where(x => !x.IsSold)
 					.OrderByDescending(x => x.Id)
 					.Take(10)
-					.Include(x => x.IdNavigation)
+					.Include(x => x.IdSellerNavigation)
 					.Include(x => x.IdItemNavigation)
 					.AsNoTracking()
 					.ToList();

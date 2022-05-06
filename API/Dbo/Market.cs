@@ -10,6 +10,6 @@
         public bool IsSold { get; set; }
 
         public virtual Item IdItemNavigation { get; set; } = null!;
-        public virtual User IdNavigation { get; set; } = null!;
+        public virtual User IdSellerNavigation { get; set; } = null!;
     }
 }
