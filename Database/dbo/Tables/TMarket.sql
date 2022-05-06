@@ -7,6 +7,8 @@
     [Is_sold]   BIT NOT NULL,
     CONSTRAINT [PK_Market] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Market_Item] FOREIGN KEY ([Id_item]) REFERENCES [dbo].[TItem] ([Id]),
-    CONSTRAINT [FK_Market_User] FOREIGN KEY ([Id]) REFERENCES [dbo].[TUser] ([Id])
+    CONSTRAINT [FK_Market_User] FOREIGN KEY ([Id_seller]) REFERENCES [dbo].[TUser] ([Id])
 );
+
+
 
