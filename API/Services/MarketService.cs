@@ -8,12 +8,14 @@ namespace API.Services
 	{
 		private readonly IMarketRepository _marketRepository;
 		private readonly IInventoryRepository _inventoryRepository;
-		private readonly IUserRepository _userRepository;
+        private readonly IItemRepository _itemRepository;
+        private readonly IUserRepository _userRepository;
 
-		public MarketService(IMarketRepository marketRepository, IInventoryRepository inventoryRepository, IUserRepository userRepository)
+		public MarketService(IMarketRepository marketRepository, IInventoryRepository inventoryRepository, IUserRepository userRepository, IItemRepository itemRepository)
 		{
 			_marketRepository = marketRepository;
 			_inventoryRepository = inventoryRepository;
+			_itemRepository = itemRepository;
 			_userRepository = userRepository;
 		}
 
@@ -117,5 +119,25 @@ namespace API.Services
 
 			return true;
 		}
-	}
+
+        public ItemAveragePrice? GetAveragePriceByItemId(int itemId)
+        {
+            var listings = _marketRepository.GetOpenListingsByItemId(itemId);
+			var item = _itemRepository.GetById(itemId);
+
+			if (listings == null || item == null)
+            {
+                return null;
+            }
+            
+            int totalPrice = 0;
+            foreach (var listing in listings)
+            {
+                totalPrice += listing.Price;
+            }
+            var averagePrice = listings.Count() <= 0 ? 0 : totalPrice / listings.Count();
+
+            return new ItemAveragePrice() { Id = itemId, Name = item.Name, AveragePrice = averagePrice };
+        }
+    }
 }

@@ -10,6 +10,7 @@ namespace Hotel_des_ventes.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IMarketService _marketService;
         private readonly IUserService _userService;
+        private readonly IItemService _itemService;
         private readonly IMapper _mapper;
 
         public ItemController(ILogger<HomeController> logger, IMarketService marketService, IUserService userService, IItemService itemService, IMapper mapper)
@@ -17,6 +18,7 @@ namespace Hotel_des_ventes.Controllers
             _logger = logger;
             _marketService = marketService;
             _userService = userService;
+            _itemService = itemService;
             _mapper = mapper;
         }
         
@@ -45,15 +47,29 @@ namespace Hotel_des_ventes.Controllers
 
         public IActionResult SellItem(int itemId)
         {
-            if (Request.Cookies["UserID"] != null)
-            {
-                ViewBag.Money = "5000";
-            }
-            
             if (Request.Cookies["UserID"] == null)
                 return RedirectToAction("Login", "Connection");
-            var sellItem = new SellItemViewModel() { Id = itemId, Name = "Item 1", AveragePrice= 50 };
-            return View(sellItem);
+            try
+            {
+                int id = int.Parse(Request.Cookies["UserID"]);
+                ViewBag.Money = _userService.GetUserMoney(id);
+            }
+            catch
+            {
+                ViewBag.Error = "Cannot parse UserID to int";
+            }
+
+            if (Request.Cookies["UserID"] == null)
+                return RedirectToAction("Login", "Connection");
+
+            var dbItem = _marketService.GetAveragePriceByItemId(itemId);
+            if (dbItem == null)
+            {
+                ViewBag.Error = "Item not found";
+                return RedirectToAction("Index", "Controller");
+            }
+            var sellItemViewModel = _mapper.Map<SellItemViewModel>(dbItem);
+            return View(sellItemViewModel);
         }
 
         [HttpPost]
@@ -80,7 +96,12 @@ namespace Hotel_des_ventes.Controllers
                 {
                     int quantityValue = int.Parse(quantity);
                     int priceValue = int.Parse(price);
-                    _marketService.CreateListing(userId!, itemId, quantityValue, priceValue);
+                    var market = _marketService.CreateListing(userId!, itemId, quantityValue, priceValue);
+                    if (market == null)
+                    {
+                        ViewBag.Error = "You don't have enough money";
+                        return SellItem(itemId);
+                    }
                 }
                 catch
                 {

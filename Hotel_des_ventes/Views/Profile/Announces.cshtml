@@ -39,7 +39,7 @@
             <td>@Html.DisplayFor(ModelItem => item.Item)</td>
             <td>@Html.DisplayFor(ModelItem => item.Price)</td>
             <td>@Html.DisplayFor(ModelItem => item.Quantity)</td>
-            <td>@if (item.Is_Sold) { @Html.Display("Yes") } else { @Html.Display("No") }</td>
+            <td>@if (item.Is_Sold) { <p>Yes</p> } else { <p>No</p> }</td>
         </tr>
     }
 </table>
