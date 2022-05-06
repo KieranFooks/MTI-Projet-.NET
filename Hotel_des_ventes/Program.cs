@@ -20,6 +20,9 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IMarketService, MarketService>();
 builder.Services.AddTransient<IItemService, ItemService>();
 
+builder.Services.AddAutoMapper(typeof(Hotel_des_ventes.Models.AutomapperProfiles));
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,4 +1,6 @@
-﻿using Hotel_des_ventes.Models;
+﻿using API.Services.Interfaces;
+using AutoMapper;
+using Hotel_des_ventes.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,42 +9,51 @@ namespace Hotel_des_ventes.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IMarketService _marketService;
+        private readonly IUserService _userService;
+        private readonly IItemService _itemService;
+        private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IMarketService marketService, IUserService userService, IItemService itemService, IMapper mapper)
         {
             _logger = logger;
+            _marketService = marketService;
+            _userService = userService;
+            _itemService = itemService;
+            _mapper = mapper;
         }
 
-        public IActionResult Index(int? itemId)
+        public async Task<IActionResult> Index(int? itemId)
         {
             if (Request.Cookies["UserID"] != null)
             {
-                ViewBag.Money = "5000";
+                try
+                {
+                    int id = int.Parse(Request.Cookies["UserID"]);
+                    ViewBag.Money = _userService.GetUserMoney(id);
+                }
+                catch
+                {
+                    ViewBag.Error = "Cannot parse UserID to int";
+                }
             }
-            
-            var items = new List<ItemViewModel>();
-            items.Add(new ItemViewModel() { Id = -1, Name = "None" });
 
-            items.Add(new ItemViewModel() { Id = 0, Name = "Emeraude" });
-            items.Add(new ItemViewModel() { Id = 1, Name = "Rubis" });
-            items.Add(new ItemViewModel() { Id = 2, Name = "Saphyr" });
-            items.Add(new ItemViewModel() { Id = 3, Name = "Stone" });
+            var dbItems = await _itemService.GetAll();
+            var items = _mapper.Map<List<ItemViewModel>>(dbItems);
+            items.Insert(0, new ItemViewModel() { Id = -1, Name = "None" });
 
             var selectedItem = -1;
-            
-            var announces = new List<AnnouncesModel>();
 
+            List<AnnouncesModel> announces;
             if (itemId != null && itemId != -1)
             {
-                selectedItem = (int)itemId;
-                for (int i = 0; i < 10; i++)
-                    announces.Add(new AnnouncesModel() { Id = 1, Item = "Rubis", Seller = "Hugo", Price = 10, Quantity = 10 });
-
+                var dbAnnounces = _marketService.GetOpenListingsByItemId((int)itemId);
+                announces = _mapper.Map<List<AnnouncesModel>>(dbAnnounces);
             }
             else
             {
-                for (int i = 0; i < 10; i++)
-                    announces.Add(new AnnouncesModel() { Id = 1, Item = "Emeraude", Seller = "Eliott", Price = 10, Quantity = 10 });
+                var dbAnnounces = _marketService.GetRecentOpenListings();
+                announces = _mapper.Map<List<AnnouncesModel>>(dbAnnounces);
             }
             var homeViewModel = new HomeViewModel() { selectedItem = selectedItem, Announces = announces, Items = items };
             return View(homeViewModel);
