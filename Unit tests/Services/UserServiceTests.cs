@@ -57,6 +57,21 @@ namespace Unit_tests.Services
 				Quantity = 10
 			}
 		};
+		IEnumerable<Item>? items = new List<Item>
+		{
+			new Item
+			{
+				Id = 1,
+				Name = "Sword",
+				Description = "Use to cut things, usually people"
+			},
+			new Item
+			{
+				Id = 2,
+				Name = "Pen",
+				Description = "Use it to write or draw"
+			}
+		};
 
 		[Fact]
 		public void GetUserById_Success()
@@ -220,6 +235,29 @@ namespace Unit_tests.Services
 			var userInventory = service.GetUserInventory(id);
 
 			Assert.Null(userInventory);
+		}
+
+		[Fact]
+		public async Task CreateUser_Success()
+		{
+			string username = "Test";
+			string password = "Password";
+			User? user = new User
+			{
+				Id = 3,
+				Name = username,
+				Password = password,
+				Money = 100,
+			};
+
+			var userRepoMock = Mock.Of<IUserRepository>(r => r.Insert(It.IsAny<User>()) == Task.FromResult(user));
+			var itemRepoMock = Mock.Of<IItemRepository>(r => r.Get("") == Task.FromResult(items));
+			var service = new UserService(userRepoMock, Mock.Of<IInventoryRepository>(), itemRepoMock);
+
+			var newUser = await service.CreateUser(username, password);
+
+			Assert.NotNull(newUser);
+			Assert.Equal(user!, newUser!);
 		}
 	}
 }
