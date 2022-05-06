@@ -5,11 +5,9 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hotel_des_ventes", "Hotel_des_ventes\Hotel_des_ventes.csproj", "{E1247733-F301-4974-A098-2336C5BA192B}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{8D1721A8-C690-4E7B-ABE1-0458AB1BBCC8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{9EB30A46-C63C-4EAD-A0F0-9CB039C2E4EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit tests", "Unit tests\Unit tests.csproj", "{D3ECA955-4C44-4355-8CD8-EA3A09EE39E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unit tests", "Unit tests\Unit tests.csproj", "{D3ECA955-4C44-4355-8CD8-EA3A09EE39E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,12 +19,6 @@ Global
 		{E1247733-F301-4974-A098-2336C5BA192B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1247733-F301-4974-A098-2336C5BA192B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1247733-F301-4974-A098-2336C5BA192B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8D1721A8-C690-4E7B-ABE1-0458AB1BBCC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D1721A8-C690-4E7B-ABE1-0458AB1BBCC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8D1721A8-C690-4E7B-ABE1-0458AB1BBCC8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{8D1721A8-C690-4E7B-ABE1-0458AB1BBCC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8D1721A8-C690-4E7B-ABE1-0458AB1BBCC8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8D1721A8-C690-4E7B-ABE1-0458AB1BBCC8}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{9EB30A46-C63C-4EAD-A0F0-9CB039C2E4EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9EB30A46-C63C-4EAD-A0F0-9CB039C2E4EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EB30A46-C63C-4EAD-A0F0-9CB039C2E4EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
