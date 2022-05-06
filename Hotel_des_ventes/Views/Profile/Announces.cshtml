@@ -30,6 +30,7 @@
             <th style="width:50%">@Html.DisplayNameFor(Model => Model.Announces.First().Item)</th>
             <th style="width:20%">@Html.DisplayNameFor(Model => Model.Announces.First().Price)</th>
             <th style="width:20%">@Html.DisplayNameFor(Model => Model.Announces.First().Quantity)</th>
+            <th style="width:10%">Is Sold</th>
         </tr>
     </thead>
     @foreach(var item in Model.Announces)
@@ -38,6 +39,7 @@
             <td>@Html.DisplayFor(ModelItem => item.Item)</td>
             <td>@Html.DisplayFor(ModelItem => item.Price)</td>
             <td>@Html.DisplayFor(ModelItem => item.Quantity)</td>
+            <td>@if (item.Is_Sold) { @Html.Display("Yes") } else { @Html.Display("No") }</td>
         </tr>
     }
 </table>

@@ -78,7 +78,7 @@ namespace API.Services
 			return listing;
 		}
 
-		public bool UserBuyListing(int buyerId, int marketId)
+		public async Task<bool> UserBuyListing(int buyerId, int marketId)
 		{ 
 			// Get listing
 			Market? listing = _marketRepository.GetById(marketId);
@@ -104,7 +104,7 @@ namespace API.Services
 					IdUser = buyerId,
 					Quantity = listing.Quantity
 				};
-				_inventoryRepository.Insert(newItem);
+				await _inventoryRepository.Insert(newItem);
 			}
 			else
 			{
