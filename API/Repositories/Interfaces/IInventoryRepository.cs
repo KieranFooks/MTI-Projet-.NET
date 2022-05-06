@@ -8,5 +8,6 @@ namespace API.Repositories.Interfaces
 		Inventory? GetUserItem(int userId, int itemId);
 		bool UpdateQuantity(Inventory item);
 		public IEnumerable<Inventory>? GetUserInventory(int userId);
+		public Task<Inventory?> InsertRange(List<Inventory> entity);
 	}
 }

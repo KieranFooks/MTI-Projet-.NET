@@ -8,25 +8,42 @@ namespace API.Services
 	{
 		private readonly IUserRepository _userRepository;
 		private readonly IInventoryRepository _inventoryRepository;
+		private readonly IItemRepository _itemRepository;
 
-		public UserService(IUserRepository userRepository, IInventoryRepository inventoryRepository)
+		public UserService(IUserRepository userRepository, IInventoryRepository inventoryRepository, IItemRepository itemRepository)
 		{
 			_userRepository = userRepository;
 			_inventoryRepository = inventoryRepository;
+			_itemRepository = itemRepository;
 		}
 
 		public async Task<User?> CreateUser(string username, string password)
 		{
-			var user = new Dbo.User
+			var items = await _itemRepository.Get();
+			var user = new User
 			{
 				Name = username,
 				Password = password,
 				Money = 100
 			};
-
+			var user_insert = await _userRepository.Insert(user);
+			if (user_insert == null)
+				return null;
 			// TODO: Give items to the user
-
-			return await _userRepository.Insert(user);
+			List<Inventory> inventories = new List<Inventory>();
+			
+			foreach (var item in items)
+			{
+				var starting_items = new Inventory
+				{
+					IdItem = item.Id,
+					IdUser = user_insert.Id,
+					Quantity = 1
+				};
+				inventories.Add(starting_items);
+			}
+			await _inventoryRepository.InsertRange(inventories);
+			return user_insert;
 		}
 
 		public int GetNumberOfUsers()

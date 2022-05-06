@@ -46,7 +46,6 @@ namespace API.Repositories
 					_context.SaveChanges();
 					return true;
 				}
-
 				return false;
 			}
 			catch (Exception ex)
@@ -79,7 +78,7 @@ namespace API.Repositories
 		public override async Task<Inventory?> Insert(Inventory entity)
 		{
 			Tinventory dbEntity = _mapper.Map<Tinventory>(entity);
-			_set.Add(dbEntity);
+			await _set.AddAsync(dbEntity);
 			try
 			{
 				await _context.SaveChangesAsync();
@@ -92,5 +91,21 @@ namespace API.Repositories
 				return null;
 			}
 		}
-	}
+		public async Task<Inventory?> InsertRange(List<Inventory> entity)
+		{
+			List<Tinventory> dbEntity = _mapper.Map<List<Tinventory>>(entity);
+			await _set.AddRangeAsync(dbEntity);
+			try
+			{
+				await _context.SaveChangesAsync();
+				Inventory newEntity = _mapper.Map<Inventory>(dbEntity);
+				return newEntity;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError("error on db", ex);
+				return null;
+			}
+		}
+    }
 }

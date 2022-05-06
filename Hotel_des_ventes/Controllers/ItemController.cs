@@ -99,7 +99,7 @@ namespace Hotel_des_ventes.Controllers
                     var market = _marketService.CreateListing(userId!, itemId, quantityValue, priceValue);
                     if (market == null)
                     {
-                        ViewBag.Error = "You don't have enough money";
+                        ViewBag.Error = "You don't have enough items";
                         return SellItem(itemId);
                     }
                 }
