@@ -16,19 +16,12 @@ namespace Unit_tests.Repositories
 {
 	public class ItemRepositoryTests
 	{
-		private DbContextOptions<Hotel_des_ventesContext> options;
-
-		public ItemRepositoryTests()
+		private DbContextOptions<Hotel_des_ventesContext> InitData(string dbName)
 		{
-			options = new DbContextOptionsBuilder<Hotel_des_ventesContext>().
-				UseInMemoryDatabase(databaseName: "db")
+			var options = new DbContextOptionsBuilder<Hotel_des_ventesContext>().
+				UseInMemoryDatabase(databaseName: dbName)
 				.EnableSensitiveDataLogging()
 				.Options;
-			InitData();
-		}
-
-		private void InitData()
-		{
 			using var context = new Hotel_des_ventesContext(options);
 			context.Database.EnsureDeleted();
 			context.Database.EnsureCreated();
@@ -101,10 +94,13 @@ namespace Unit_tests.Repositories
 			context.Titems.AddRange(items);
 			context.Tmarkets.AddRange(market);
 			context.SaveChanges();
+
+			return options;
 		}
 
-		private ItemRepository GetRepo()
+		private ItemRepository GetRepo(string dbName)
 		{
+			var options = InitData(dbName);
 			var context = new Hotel_des_ventesContext(options);
 			var mapper = new Mapper(new MapperConfiguration(cfg =>
 			{
@@ -126,7 +122,7 @@ namespace Unit_tests.Repositories
 		public void GetById_Success()
 		{
 			int id = 1;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetById_Success));
 			var item = repo.GetById(id);
 
 			Assert.NotNull(item);
@@ -137,7 +133,7 @@ namespace Unit_tests.Repositories
 		public void GetById_NotFound()
 		{
 			int id = 42;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetById_NotFound));
 			var item = repo.GetById(id);
 
 			Assert.Null(item);
