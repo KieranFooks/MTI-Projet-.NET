@@ -34,22 +34,22 @@ namespace API.DataAccess
         {
             modelBuilder.Entity<Tinventory>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.IdUser, e.IdItem });
 
                 entity.ToTable("TInventory");
 
-                entity.Property(e => e.IdItem).HasColumnName("Id_item");
-
                 entity.Property(e => e.IdUser).HasColumnName("Id_user");
 
+                entity.Property(e => e.IdItem).HasColumnName("Id_item");
+
                 entity.HasOne(d => d.IdItemNavigation)
-                    .WithMany()
+                    .WithMany(p => p.Tinventories)
                     .HasForeignKey(d => d.IdItem)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Inventory_Item");
 
                 entity.HasOne(d => d.IdUserNavigation)
-                    .WithMany()
+                    .WithMany(p => p.Tinventories)
                     .HasForeignKey(d => d.IdUser)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Inventory_User");
@@ -62,34 +62,11 @@ namespace API.DataAccess
                 entity.Property(e => e.Description).HasColumnType("text");
 
                 entity.Property(e => e.Name).HasMaxLength(100);
-
-                entity.HasData(new Titem
-                {
-                    Id = 1,
-                    Name = "Palantír",
-                    Description = "Used for communication and to see events, whether past or future.",
-                });
-
-                entity.HasData(new Titem
-                {
-                    Id = 2,
-                    Name = "Lightsaber",
-                    Description = "Luminescent plasma blade, can cut steel.",
-                });
-
-                entity.HasData(new Titem
-                {
-                    Id = 3,
-                    Name = "Mug",
-                    Description = "Use it to transport a small amount of fluid, like coffee.",
-                });
             });
 
             modelBuilder.Entity<Tmarket>(entity =>
             {
                 entity.ToTable("TMarket");
-
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.IdItem).HasColumnName("Id_item");
 
@@ -97,17 +74,17 @@ namespace API.DataAccess
 
                 entity.Property(e => e.IsSold).HasColumnName("Is_sold");
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.Tmarket)
-                    .HasForeignKey<Tmarket>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Market_User");
-
                 entity.HasOne(d => d.IdItemNavigation)
                     .WithMany(p => p.Tmarkets)
                     .HasForeignKey(d => d.IdItem)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Market_Item");
+
+                entity.HasOne(d => d.IdSellerNavigation)
+                    .WithMany(p => p.Tmarkets)
+                    .HasForeignKey(d => d.IdSeller)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Market_User");
             });
 
             modelBuilder.Entity<Tuser>(entity =>

@@ -13,6 +13,6 @@ namespace API.DataAccess
         public bool IsSold { get; set; }
 
         public virtual Titem IdItemNavigation { get; set; } = null!;
-        public virtual Tuser IdNavigation { get; set; } = null!;
+        public virtual Tuser IdSellerNavigation { get; set; } = null!;
     }
 }
