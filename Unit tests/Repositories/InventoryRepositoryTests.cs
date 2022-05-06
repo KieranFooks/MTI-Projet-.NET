@@ -61,7 +61,7 @@ namespace Unit_tests.Repositories
 			Assert.NotNull(item);
 			Assert.Equal(userId, item!.IdUser);
 			Assert.Equal(itemId, item.IdItem);
-			Assert.Equal(1, item.Quantity);
+			Assert.Equal(10, item.Quantity);
 		}
 
 		[Fact]
@@ -170,7 +170,7 @@ namespace Unit_tests.Repositories
 			Assert.Equal(1, inventory!.ElementAt(0).Quantity);
 			Assert.Equal(1, inventory!.ElementAt(1).IdUser);
 			Assert.Equal(2, inventory!.ElementAt(1).IdItem);
-			Assert.Equal(1, inventory!.ElementAt(1).Quantity);
+			Assert.Equal(10, inventory!.ElementAt(1).Quantity);
 		}
 
 		[Fact]

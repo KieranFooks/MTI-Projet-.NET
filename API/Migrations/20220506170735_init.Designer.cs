@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(Hotel_des_ventesContext))]
-    [Migration("20220506162743_AddingTinventories")]
-    partial class AddingTinventories
+    [Migration("20220506170735_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,7 +53,7 @@ namespace API.Migrations
                         {
                             IdUser = 1,
                             IdItem = 2,
-                            Quantity = 1
+                            Quantity = 10
                         },
                         new
                         {
@@ -151,7 +151,7 @@ namespace API.Migrations
                             IdItem = 1,
                             IdSeller = 1,
                             IsSold = false,
-                            Price = 0,
+                            Price = 500,
                             Quantity = 1
                         },
                         new
@@ -160,8 +160,8 @@ namespace API.Migrations
                             IdItem = 2,
                             IdSeller = 1,
                             IsSold = false,
-                            Price = 0,
-                            Quantity = 1
+                            Price = 10000,
+                            Quantity = 5
                         },
                         new
                         {
@@ -169,7 +169,7 @@ namespace API.Migrations
                             IdItem = 2,
                             IdSeller = 1,
                             IsSold = true,
-                            Price = 0,
+                            Price = 100,
                             Quantity = 1
                         },
                         new
@@ -178,8 +178,8 @@ namespace API.Migrations
                             IdItem = 2,
                             IdSeller = 2,
                             IsSold = false,
-                            Price = 0,
-                            Quantity = 1
+                            Price = 1000,
+                            Quantity = 3
                         });
                 });
 
