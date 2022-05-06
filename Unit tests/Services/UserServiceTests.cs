@@ -63,7 +63,7 @@ namespace Unit_tests.Services
 		{
 			int id = 1;
 			var mock = Mock.Of<IUserRepository>(r => r.GetById(id) == users[0]);
-			var service = new UserService(mock, Mock.Of<IInventoryRepository>());
+			var service = new UserService(mock, Mock.Of<IInventoryRepository>(),Mock.Of<IItemRepository>());
 
 			var user = service.GetUserById(id);
 
@@ -76,7 +76,7 @@ namespace Unit_tests.Services
 		{
 			int id = 42;
 			var mock = Mock.Of<IUserRepository>(r => r.GetById(id) == null);
-			var service = new UserService(mock, Mock.Of<IInventoryRepository>());
+			var service = new UserService(mock, Mock.Of<IInventoryRepository>(), Mock.Of<IItemRepository>());
 
 			var user = service.GetUserById(id);
 
@@ -88,7 +88,7 @@ namespace Unit_tests.Services
 		{
 			var count = 42;
 			var mock = Mock.Of<IUserRepository>(r => r.Count() == count);
-			var service = new UserService(mock, Mock.Of<IInventoryRepository>());
+			var service = new UserService(mock, Mock.Of<IInventoryRepository>(), Mock.Of<IItemRepository>());
 
 			var returnedCount = service.GetNumberOfUsers();
 
@@ -100,7 +100,7 @@ namespace Unit_tests.Services
 		{
 			var name = "TestName";
 			var mock = Mock.Of<IUserRepository>(r => r.GetByName(name) == null);
-			var service = new UserService(mock, Mock.Of<IInventoryRepository>());
+			var service = new UserService(mock, Mock.Of<IInventoryRepository>(), Mock.Of<IItemRepository>());
 
 			var available = service.IsNameAvailable(name);
 
@@ -112,7 +112,7 @@ namespace Unit_tests.Services
 		{
 			var name = users[0].Name;
 			var mock = Mock.Of<IUserRepository>(r => r.GetByName(name) == users[0]);
-			var service = new UserService(mock, Mock.Of<IInventoryRepository>());
+			var service = new UserService(mock, Mock.Of<IInventoryRepository>(), Mock.Of<IItemRepository>());
 
 			var available = service.IsNameAvailable(name);
 
@@ -124,7 +124,7 @@ namespace Unit_tests.Services
 		{
 			var user = users[0];
 			var mock = Mock.Of<IUserRepository>(r => r.GetById(user.Id) == user);
-			var service = new UserService(mock, Mock.Of<IInventoryRepository>());
+			var service = new UserService(mock, Mock.Of<IInventoryRepository>(), Mock.Of<IItemRepository>());
 
 			var userMoney = service.GetUserMoney(user.Id);
 
@@ -137,7 +137,7 @@ namespace Unit_tests.Services
 		{
 			var id = 42;
 			var mock = Mock.Of<IUserRepository>(r => r.GetById(id) == null);
-			var service = new UserService(mock, Mock.Of<IInventoryRepository>());
+			var service = new UserService(mock, Mock.Of<IInventoryRepository>(), Mock.Of<IItemRepository>());
 
 			var userMoney = service.GetUserMoney(id);
 
@@ -149,7 +149,7 @@ namespace Unit_tests.Services
 		{
 			var user = users[0];
 			var mock = Mock.Of<IUserRepository>(r => r.GetUserByNameAndPassword(user.Name, user.Password) == user);
-			var service = new UserService(mock, Mock.Of<IInventoryRepository>());
+			var service = new UserService(mock, Mock.Of<IInventoryRepository>(), Mock.Of<IItemRepository>());
 
 			var connectedUser = service.Connect(user.Name, user.Password);
 
@@ -163,7 +163,7 @@ namespace Unit_tests.Services
 			var user = users[0];
 			var pwd = "123456789";
 			var mock = Mock.Of<IUserRepository>(r => r.GetUserByNameAndPassword(user.Name, pwd) == null);
-			var service = new UserService(mock, Mock.Of<IInventoryRepository>());
+			var service = new UserService(mock, Mock.Of<IInventoryRepository>(), Mock.Of<IItemRepository>());
 
 			var connectedUser = service.Connect(user.Name, pwd);
 
@@ -176,7 +176,7 @@ namespace Unit_tests.Services
 			var name = "Waaaaaa";
 			var pwd = "123456789";
 			var mock = Mock.Of<IUserRepository>(r => r.GetUserByNameAndPassword(name, pwd) == null);
-			var service = new UserService(mock, Mock.Of<IInventoryRepository>());
+			var service = new UserService(mock, Mock.Of<IInventoryRepository>(), Mock.Of<IItemRepository>());
 
 			var connectedUser = service.Connect(name, pwd);
 
@@ -188,7 +188,7 @@ namespace Unit_tests.Services
 		{
 			int id = 1;
 			var mock = Mock.Of<IInventoryRepository>(r => r.GetUserInventory(id) == inventory);
-			var service = new UserService(Mock.Of<IUserRepository>(), mock);
+			var service = new UserService(Mock.Of<IUserRepository>(), mock, Mock.Of<IItemRepository>());
 
 			var userInventory = service.GetUserInventory(id);
 
@@ -202,7 +202,7 @@ namespace Unit_tests.Services
 		{
 			int id = 1;
 			var mock = Mock.Of<IInventoryRepository>(r => r.GetUserInventory(id) == new List<Inventory>());
-			var service = new UserService(Mock.Of<IUserRepository>(), mock);
+			var service = new UserService(Mock.Of<IUserRepository>(), mock, Mock.Of<IItemRepository>());
 
 			var userInventory = service.GetUserInventory(id);
 
@@ -215,7 +215,7 @@ namespace Unit_tests.Services
 		{
 			int id = 42;
 			var mock = Mock.Of<IInventoryRepository>(r => r.GetUserInventory(id) == null);
-			var service = new UserService(Mock.Of<IUserRepository>(), mock);
+			var service = new UserService(Mock.Of<IUserRepository>(), mock, Mock.Of<IItemRepository>());
 
 			var userInventory = service.GetUserInventory(id);
 

@@ -159,6 +159,7 @@ namespace API.DataAccess
                 Id = 1,
                 IdItem = 1,
                 IdSeller = 1,
+                Quantity = 1,
                 IsSold = false
             });
 
@@ -167,7 +168,44 @@ namespace API.DataAccess
                 Id = 2,
                 IdItem = 2,
                 IdSeller = 1,
+                Quantity = 1,
                 IsSold = false
+            });
+            modelBuilder.Entity<Tmarket>().HasData(new Tmarket
+            {
+                Id = 3,
+                IdItem = 2,
+                IdSeller = 1,
+                Quantity = 1,
+                IsSold = true
+            });
+
+            modelBuilder.Entity<Tmarket>().HasData(new Tmarket
+            {
+                Id = 4,
+                IdItem = 2,
+                IdSeller = 2,
+                Quantity = 1,
+                IsSold = false
+            });
+
+            modelBuilder.Entity<Tinventory>().HasData(new Tinventory
+            {
+                IdUser = 1,
+                IdItem = 1,
+                Quantity = 1               
+            });
+            modelBuilder.Entity<Tinventory>().HasData(new Tinventory
+            {
+                IdUser = 1,
+                IdItem = 2,
+                Quantity = 1
+            });
+            modelBuilder.Entity<Tinventory>().HasData(new Tinventory
+            {
+                IdUser = 2,
+                IdItem = 3,
+                Quantity = 5
             });
             OnModelCreatingPartial(modelBuilder);
         }

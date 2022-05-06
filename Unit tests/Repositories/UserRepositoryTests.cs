@@ -26,31 +26,6 @@ namespace Unit_tests.Repositories
 			using var context = new Hotel_des_ventesContext(options);
 			context.Database.EnsureDeleted();
 			context.Database.EnsureCreated();
-
-			List<Tuser> users = new List<Tuser>
-			{
-				new Tuser
-				{
-					Name = "XxGamerxX",
-					Password = "azertyuiop",
-					Money = 4242
-				},
-				new Tuser
-				{
-					Name = "Legwarmer6486",
-					Password = "3YPRgph3e@VNzzxX&c",
-					Money = 0
-				},
-				new Tuser
-				{
-					Name = "Winner4604",
-					Password = "mVWbUp%oA!#f4UTda4",
-					Money = 9000
-				}
-			};
-			context.Tusers.AddRange(users);
-			context.SaveChanges();
-
 			return options;
 		}
 
@@ -80,7 +55,7 @@ namespace Unit_tests.Repositories
 			var repo = GetRepo(nameof(CountTest));
 			var count = repo.Count();
 
-			Assert.Equal(3, count);
+			Assert.Equal(4, count);
 		}
 
 		[Fact]
@@ -107,7 +82,7 @@ namespace Unit_tests.Repositories
 		[Fact]
 		public void GetByNameTest_Success()
 		{
-			var name = "Legwarmer6486";
+			var name = "Gabriel";
 			var repo = GetRepo(nameof(GetByNameTest_Success));
 			var user = repo.GetByName(name);
 
@@ -142,14 +117,14 @@ namespace Unit_tests.Repositories
 
 			Assert.NotNull(sender);
 			Assert.NotNull(receiver);
-			Assert.Equal(4142, sender!.Money);
-			Assert.Equal(100, receiver!.Money);
+			Assert.Equal(4900, sender!.Money);
+			Assert.Equal(5100, receiver!.Money);
 		}
 
 		[Fact]
 		public void TransferUserMoney_NotEnoughMoney()
 		{
-			var amount = 100;
+			var amount = 6000;
 			var senderId = 2;
 			var receiverId = 1;
 
@@ -163,8 +138,8 @@ namespace Unit_tests.Repositories
 
 			Assert.NotNull(sender);
 			Assert.NotNull(receiver);
-			Assert.Equal(0, sender!.Money);
-			Assert.Equal(4242, receiver!.Money);
+			Assert.Equal(5000, sender!.Money);
+			Assert.Equal(5000, receiver!.Money);
 		}
 
 		[Fact]
@@ -182,7 +157,7 @@ namespace Unit_tests.Repositories
 			var receiver = repo.GetById(receiverId);
 
 			Assert.NotNull(receiver);
-			Assert.Equal(4242, receiver!.Money);
+			Assert.Equal(5000, receiver!.Money);
 		}
 
 		[Fact]
@@ -200,7 +175,7 @@ namespace Unit_tests.Repositories
 			var sender = repo.GetById(senderId);
 
 			Assert.NotNull(sender);
-			Assert.Equal(4242, sender!.Money);
+			Assert.Equal(5000, sender!.Money);
 		}
 	}
 }

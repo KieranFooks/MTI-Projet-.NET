@@ -25,99 +25,7 @@ namespace Unit_tests.Repositories
 				.Options;
 			using var context = new Hotel_des_ventesContext(options);
 			context.Database.EnsureDeleted();
-			context.Database.EnsureCreated();
-
-			List<Tuser> users = new List<Tuser>
-			{
-				new Tuser
-				{
-					Name = "XxGamerxX",
-					Password = "azertyuiop",
-					Money = 4242
-				},
-				new Tuser
-				{
-					Name = "Legwarmer6486",
-					Password = "3YPRgph3e@VNzzxX&c",
-					Money = 0
-				},
-				new Tuser
-				{
-					Name = "Winner4604",
-					Password = "mVWbUp%oA!#f4UTda4",
-					Money = 9000
-				}
-			};
-			List<Titem> items = new List<Titem>
-			{
-				new Titem
-				{
-					Name = "Sword",
-					Description = "Use to cut things, usually people"
-				},
-				new Titem
-				{
-					Name = "Pen",
-					Description = "Use it to write or draw"
-				}
-			};
-			List<Tinventory> inventories = new List<Tinventory>
-			{
-				new Tinventory
-				{
-					IdUser = 1,
-					IdItem = 1,
-					Quantity = 1
-				},
-				new Tinventory
-				{
-					IdUser = 1,
-					IdItem = 2,
-					Quantity = 10
-				},
-				new Tinventory
-				{
-					IdUser = 2,
-					IdItem = 1,
-					Quantity = 5
-				}
-			};
-			List<Tmarket> market = new List<Tmarket>
-			{
-				new Tmarket
-				{
-					Id = 1,
-					IdSeller = 1,
-					Price = 100,
-					IdItem = 1,
-					Quantity = 5,
-					IsSold = false
-				},
-				new Tmarket
-				{
-					Id = 2,
-					IdSeller = 2,
-					Price = 10,
-					IdItem = 1,
-					Quantity = 1,
-					IsSold = true
-				},
-				new Tmarket
-				{
-					Id = 3,
-					IdSeller = 2,
-					Price = 10,
-					IdItem = 2,
-					Quantity = 5,
-					IsSold = false
-				}
-			};
-			context.Tusers.AddRange(users);
-			context.Titems.AddRange(items);
-			context.Tinventories.AddRange(inventories);
-			context.Tmarkets.AddRange(market);
-			context.SaveChanges();
-
+			context.Database.EnsureCreated();		
 			return options;
 		}
 
@@ -153,7 +61,7 @@ namespace Unit_tests.Repositories
 			Assert.NotNull(item);
 			Assert.Equal(userId, item!.IdUser);
 			Assert.Equal(itemId, item.IdItem);
-			Assert.Equal(10, item.Quantity);
+			Assert.Equal(1, item.Quantity);
 		}
 
 		[Fact]
@@ -262,7 +170,7 @@ namespace Unit_tests.Repositories
 			Assert.Equal(1, inventory!.ElementAt(0).Quantity);
 			Assert.Equal(1, inventory!.ElementAt(1).IdUser);
 			Assert.Equal(2, inventory!.ElementAt(1).IdItem);
-			Assert.Equal(10, inventory!.ElementAt(1).Quantity);
+			Assert.Equal(1, inventory!.ElementAt(1).Quantity);
 		}
 
 		[Fact]
