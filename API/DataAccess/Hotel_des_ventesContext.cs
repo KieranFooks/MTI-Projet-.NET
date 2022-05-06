@@ -54,16 +54,6 @@ namespace API.DataAccess
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Inventory_User");
             });
-
-            modelBuilder.Entity<Titem>(entity =>
-            {
-                entity.ToTable("TItem");
-
-                entity.Property(e => e.Description).HasColumnType("text");
-
-                entity.Property(e => e.Name).HasMaxLength(100);
-            });
-
             modelBuilder.Entity<Tmarket>(entity =>
             {
                 entity.ToTable("TMarket");
@@ -86,6 +76,14 @@ namespace API.DataAccess
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Market_User");
             });
+            modelBuilder.Entity<Titem>(entity =>
+            {
+                entity.ToTable("TItem");
+
+                entity.Property(e => e.Description).HasColumnType("text");
+
+                entity.Property(e => e.Name).HasMaxLength(100);              
+            });
 
             modelBuilder.Entity<Tuser>(entity =>
             {
@@ -93,9 +91,84 @@ namespace API.DataAccess
 
                 entity.Property(e => e.Name).HasMaxLength(100);
 
-                entity.Property(e => e.Password).HasMaxLength(100);
+                entity.Property(e => e.Password).HasMaxLength(100);                
             });
 
+            modelBuilder.Entity<Titem>().HasData(new Titem
+            {
+                Id = 1,
+                Name = "Palantír",
+                Description = "Used for communication and to see events, whether past or future.",
+            });
+
+            modelBuilder.Entity<Titem>().HasData(new Titem
+            {
+                Id = 2,
+                Name = "Lightsaber",
+                Description = "Luminescent plasma blade, can cut steel.",
+            });
+
+            modelBuilder.Entity<Titem>().HasData(new Titem
+            {
+                Id = 3,
+                Name = "Mug",
+                Description = "Use it to transport a small amount of fluid, like coffee.",
+            });
+
+            modelBuilder.Entity<Titem>().HasData(new Titem
+            {
+                Id = 4,
+                Name = "Stomb's fries",
+                Description = "Mhh tasty...",
+            });
+
+            modelBuilder.Entity<Tuser>().HasData(new Tuser
+            {
+                Id = 1,
+                Name = "Gabriel",
+                Password = "test",
+                Money = 5000
+            });
+
+            modelBuilder.Entity<Tuser>().HasData(new Tuser
+            {
+                Id = 2,
+                Name = "Hugo",
+                Password = "test",
+                Money = 5000
+            });
+
+            modelBuilder.Entity<Tuser>().HasData(new Tuser
+            {
+                Id = 3,
+                Name = "Kieran",
+                Password = "test",
+                Money = 5000
+            });
+
+            modelBuilder.Entity<Tuser>().HasData(new Tuser
+            {
+                Id = 4,
+                Name = "Eliott",
+                Password = "test",
+                Money = 5000
+            });
+
+            modelBuilder.Entity<Tmarket>().HasData(new Tmarket
+            {
+                Id = 1,
+                IdItem = 1,
+                IdSeller = 1,
+                IsSold = false
+            });
+
+            modelBuilder.Entity<Tmarket>().HasData(new Tmarket
+            {
+                Id = 2,
+                IdItem = 2,
+                IdSeller = 1,
+                IsSold = false
+            });
             OnModelCreatingPartial(modelBuilder);
         }
 
