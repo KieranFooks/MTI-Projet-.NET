@@ -21,56 +21,120 @@ namespace Hotel_des_ventes.Controllers
         }
         public IActionResult Items()
         {
+            if (TempData["errorMessage"] != null)
+            {
+                ViewBag.Error = TempData["errorMessage"].ToString();
+                TempData.Remove("errorMessage");
+            }
+            
             if (Request.Cookies["UserID"] == null)
             {
-                ViewBag.Error = "You must be logged in to access your profile";
-                return RedirectToAction("Index", "Home");
+                var errorMessage = "You must be logged in to access your profile";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
+                TempData.Remove("errorMessage");
+                TempData.Add("errorMessage", ViewBag.Error);
+                return RedirectToAction("Login", "Connection");
             }
+            int userId;
             try
             {
-                int userId = int.Parse(Request.Cookies["UserID"]);
+                userId = int.Parse(Request.Cookies["UserID"]);
                 ViewBag.Money = _userService.GetUserMoney(userId);
-                var dbUser = _userService.GetUserById(userId);
-                var dbInventory = _userService.GetUserInventory(userId);
-                var dbMarket = _marketService.GetMarketHistoryByUserId(userId);
-                var username = dbUser.Name;
-                var inventory = _mapper.Map<List<ItemViewModel>>(dbInventory);
-                var announces = _mapper.Map<List<AnnouncesModel>>(dbMarket);
-                ProfileViewModel profile = new ProfileViewModel() { Username = username, Items = inventory, Announces = announces };
-                return View(profile);
             }
             catch
             {
-                ViewBag.Error = "Cannot parse UserID to int";
+                var errorMessage = "Cannot parse UserID to int";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
                 return View();
             }
+
+            string username;
+            var dbUser = _userService.GetUserById(userId);
+            if (dbUser == null)
+            {
+                var errorMessage = "User not found";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
+                username = "";
+            }
+            else
+            {
+                username = dbUser.Name;
+            }
+
+            List<ItemViewModel> inventory;
+            var dbInventory = _userService.GetUserInventory(userId);
+            if (dbInventory == null)
+            {
+                var errorMessage = "Inventory not found";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
+                inventory = new List<ItemViewModel>();
+            }
+            else
+            {
+                inventory = _mapper.Map<List<ItemViewModel>>(dbInventory);
+            }
+
+            ProfileViewModel profile = new ProfileViewModel() { Username = username, Items = inventory };
+            return View(profile);
         }
 
         public IActionResult Announces()
         {
+            if (TempData["errorMessage"] != null)
+            {
+                ViewBag.Error = TempData["errorMessage"].ToString();
+                TempData.Remove("errorMessage");
+            }
+            
             if (Request.Cookies["UserID"] == null)
             {
-                ViewBag.Error = "You must be logged in to access your profile";
-                return RedirectToAction("Index", "Home");
+                var errorMessage = "You must be logged in to access your profile";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
+                TempData.Remove("errorMessage");
+                TempData.Add("errorMessage", ViewBag.Error);
+                return RedirectToAction("Login", "Connection");
             }
+            int userId;
             try
             {
-                int userId = int.Parse(Request.Cookies["UserID"]);
+                userId = int.Parse(Request.Cookies["UserID"]);
                 ViewBag.Money = _userService.GetUserMoney(userId);
-                var dbUser = _userService.GetUserById(userId);
-                var dbInventory = _userService.GetUserInventory(userId);
-                var dbMarket = _marketService.GetMarketHistoryByUserId(userId);
-                var username = dbUser.Name;
-                var inventory = _mapper.Map<List<ItemViewModel>>(dbInventory);
-                var announces = _mapper.Map<List<AnnouncesModel>>(dbMarket);
-                ProfileViewModel profile = new ProfileViewModel() { Username = username, Items = inventory, Announces = announces };
-                return View(profile);
             }
             catch
             {
-                ViewBag.Error = "Cannot parse UserID to int";
+                var errorMessage = "Cannot parse UserID to int";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
                 return View();
             }
+
+            string username;
+            var dbUser = _userService.GetUserById(userId);
+            if (dbUser == null)
+            {
+                var errorMessage = "User not found";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
+                username = "";
+            }
+            else
+            {
+                username = dbUser.Name;
+            }
+
+            List<AnnouncesModel> announces;
+            var dbMarket = _marketService.GetMarketHistoryByUserId(userId);
+            if (dbMarket == null)
+            {
+                var errorMessage = "Announces not found";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
+                announces = new List<AnnouncesModel>();
+            }
+            else
+            {
+                announces = _mapper.Map<List<AnnouncesModel>>(dbMarket);
+            }
+
+            ProfileViewModel profile = new ProfileViewModel() { Username = username, Announces = announces };
+            return View(profile);
         }
 
         [HttpPost]

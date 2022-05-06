@@ -25,6 +25,12 @@ namespace Hotel_des_ventes.Controllers
 
         public async Task<IActionResult> Index(int? itemId)
         {
+            if (TempData["errorMessage"] != null)
+            {
+                ViewBag.Error = TempData["errorMessage"].ToString();
+                TempData.Remove("errorMessage");
+            }
+            
             if (Request.Cookies["UserID"] != null)
             {
                 try
@@ -34,12 +40,23 @@ namespace Hotel_des_ventes.Controllers
                 }
                 catch
                 {
-                    ViewBag.Error = "Cannot parse UserID to int";
+                    var errorMessage = "Cannot parse UserID to int";
+                    ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
                 }
             }
 
             var dbItems = await _itemService.GetAll();
-            var items = _mapper.Map<List<ItemViewModel>>(dbItems);
+            List<ItemViewModel> items;
+            if (dbItems == null)
+            {
+                var errorMessage = "Error in database: Cannot get items from database";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error += "\n" + errorMessage : errorMessage;
+                items = new List<ItemViewModel>();
+            }
+            else
+            {
+                items = _mapper.Map<List<ItemViewModel>>(dbItems);
+            }
             items.Insert(0, new ItemViewModel() { Id = -1, Name = "None" });
 
             var selectedItem = -1;
@@ -48,12 +65,30 @@ namespace Hotel_des_ventes.Controllers
             if (itemId != null && itemId != -1)
             {
                 var dbAnnounces = _marketService.GetOpenListingsByItemId((int)itemId);
-                announces = _mapper.Map<List<AnnouncesModel>>(dbAnnounces);
+                if (dbAnnounces == null)
+                {
+                    var errorMessage = "Error in database: Cannot get announces from database";
+                    ViewBag.Error = ViewBag.Error != null ? ViewBag.Error += "\n" + errorMessage : errorMessage;
+                    announces = new List<AnnouncesModel>();
+                }
+                else
+                {
+                    announces = _mapper.Map<List<AnnouncesModel>>(dbAnnounces);
+                }
             }
             else
             {
                 var dbAnnounces = _marketService.GetRecentOpenListings();
-                announces = _mapper.Map<List<AnnouncesModel>>(dbAnnounces);
+                if (dbAnnounces == null)
+                {
+                    var errorMessage = "Error in database: Cannot get announces from database";
+                    ViewBag.Error = ViewBag.Error != null ? ViewBag.Error += "\n" + errorMessage : errorMessage;
+                    announces = new List<AnnouncesModel>();
+                }
+                else
+                {
+                    announces = _mapper.Map<List<AnnouncesModel>>(dbAnnounces);
+                }
             }
             var homeViewModel = new HomeViewModel() { selectedItem = selectedItem, Announces = announces, Items = items };
             return View(homeViewModel);

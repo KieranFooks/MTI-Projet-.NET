@@ -21,9 +21,15 @@ namespace Hotel_des_ventes.Controllers
             _itemService = itemService;
             _mapper = mapper;
         }
-        
-        public IActionResult Index(int AnnounceID, string? errorMessage)
+
+        public IActionResult Index(int AnnounceID)
         {
+            if (TempData["errorMessage"] != null)
+            {
+                ViewBag.Error = TempData["errorMessage"].ToString();
+                TempData.Remove("errorMessage");
+            }
+            
             if (Request.Cookies["UserID"] == null)
                 return RedirectToAction("Login", "Connection", new { AnnounceID = AnnounceID });
 
@@ -34,21 +40,36 @@ namespace Hotel_des_ventes.Controllers
             }
             catch
             {
-                ViewBag.Error = "Cannot parse UserID to int";
+                var errorMessage = "Cannot parse UserID to int";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
             }
 
-            if (errorMessage != null)
-                ViewBag.Error = errorMessage;
-
             var dbItem = _marketService.GetById(AnnounceID);
-            var itemOfferModel = _mapper.Map<ItemOfferModel>(dbItem);
+            ItemOfferModel itemOfferModel;
+            if (dbItem == null)
+            {
+                var message = "Error in database: Announce not found";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error += "\n" + message : message;
+                itemOfferModel = new ItemOfferModel();
+            }
+            else
+            {
+                itemOfferModel = _mapper.Map<ItemOfferModel>(dbItem);
+            }
             return View(itemOfferModel);
         }
 
         public IActionResult SellItem(int itemId)
         {
+            if (TempData["errorMessage"] != null)
+            {
+                ViewBag.Error = TempData["errorMessage"].ToString();
+                TempData.Remove("errorMessage");
+            }
+            
             if (Request.Cookies["UserID"] == null)
                 return RedirectToAction("Login", "Connection");
+            
             try
             {
                 int id = int.Parse(Request.Cookies["UserID"]);
@@ -56,19 +77,23 @@ namespace Hotel_des_ventes.Controllers
             }
             catch
             {
-                ViewBag.Error = "Cannot parse UserID to int";
+                var errorMessage = "Cannot parse UserID to int";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
             }
 
-            if (Request.Cookies["UserID"] == null)
-                return RedirectToAction("Login", "Connection");
 
             var dbItem = _marketService.GetAveragePriceByItemId(itemId);
+            SellItemViewModel sellItemViewModel;
             if (dbItem == null)
             {
-                ViewBag.Error = "Item not found";
-                return RedirectToAction("Index", "Controller");
+                var errorMessage = "Error in database: Item not found";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error += "\n" + errorMessage : errorMessage;
+                sellItemViewModel = new SellItemViewModel();
             }
-            var sellItemViewModel = _mapper.Map<SellItemViewModel>(dbItem);
+            else
+            {
+                sellItemViewModel = _mapper.Map<SellItemViewModel>(dbItem);
+            }
             return View(sellItemViewModel);
         }
 
@@ -76,70 +101,109 @@ namespace Hotel_des_ventes.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SellItem(string price, string quantity, int itemId)
         {
-            if (Request.Cookies["UserID"] == null)
+            if (TempData["errorMessage"] != null)
             {
-                ViewBag.Error = "You must be logged in to sell an item";
-                return RedirectToAction("Index", "Home");
+                ViewBag.Error = TempData["errorMessage"].ToString();
+                TempData.Remove("errorMessage");
             }
             
+            if (Request.Cookies["UserID"] == null)
+            {
+                var errorMessage = "You must be logged in to sell an item";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
+                TempData.Remove("errorMessage");
+                TempData.Add("errorMessage", ViewBag.Error);
+                return RedirectToAction("Login", "Connection");
+            }
+
+            int userId;
             try
             {
-                int userId = int.Parse(Request.Cookies["UserID"]);
+                userId = int.Parse(Request.Cookies["UserID"]);
                 ViewBag.Money = _userService.GetUserMoney(userId);
-
-                if (string.IsNullOrEmpty(price) || string.IsNullOrEmpty(quantity))
-                {
-                    ViewBag.Error = "Please fill all the fields";
-                    return SellItem(itemId);
-                }
-                try
-                {
-                    int quantityValue = int.Parse(quantity);
-                    int priceValue = int.Parse(price);
-                    var market = _marketService.CreateListing(userId!, itemId, quantityValue, priceValue);
-                    if (market == null)
-                    {
-                        ViewBag.Error = "You don't have enough items";
-                        return SellItem(itemId);
-                    }
-                }
-                catch
-                {
-                    ViewBag.Error = "Please fill the area with numbers";
-                    return SellItem(itemId);
-                }
-
             }
             catch
             {
-                ViewBag.Error = "Cannot parse UserID to int";
-                return View();
+                var errorMessage = "Cannot parse UserID to int";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
+                return View(itemId);
             }
-            
+
+            if (string.IsNullOrEmpty(price) || string.IsNullOrEmpty(quantity))
+            {
+                var errorMessage = "Please fill all the fields";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error += "\n" + errorMessage : errorMessage;
+                TempData.Remove("errorMessage");
+                TempData.Add("errorMessage", ViewBag.Error);
+                return SellItem(itemId);
+            }
+            try
+            {
+                int quantityValue = int.Parse(quantity);
+                int priceValue = int.Parse(price);
+                var market = _marketService.CreateListing(userId!, itemId, quantityValue, priceValue);
+                if (market == null)
+                {
+                    var errorMessage = "You don't have enough items";
+                    ViewBag.Error = ViewBag.Error != null ? ViewBag.Error += "\n" + errorMessage : errorMessage;
+                    TempData.Remove("errorMessage");
+                    TempData.Add("errorMessage", ViewBag.Error);
+                    return SellItem(itemId);
+                }
+            }
+            catch
+            {
+                var errorMessage = "Please fill all the fields with numbers";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error += "\n" + errorMessage : errorMessage;
+                TempData.Remove("errorMessage");
+                TempData.Add("errorMessage", ViewBag.Error);
+                return SellItem(itemId);
+            }
+
             return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Buy(int itemId)
+        public async Task<IActionResult> Buy(int AnnounceID)
         {
+            if (TempData["errorMessage"] != null)
+            {
+                ViewBag.Error = TempData["errorMessage"].ToString();
+                TempData.Remove("errorMessage");
+            }
+            
             if (Request.Cookies["UserID"] == null)
             {
-                ViewBag.Error = "You must be logged in to buy an item";
+                var errorMessage = "You must be logged in to buy an item";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error += "\n" + errorMessage : errorMessage;
+                TempData.Remove("errorMessage");
+                TempData.Add("errorMessage", ViewBag.Error);
                 return RedirectToAction("Index", "Home");
             }
+
+            int userId;
             try
             {
-                int userId = int.Parse(Request.Cookies["UserID"]);
+                userId = int.Parse(Request.Cookies["UserID"]);
                 ViewBag.Money = _userService.GetUserMoney(userId);
-                if (!await _marketService.UserBuyListing(userId, itemId))
-                {
-                    ViewBag.Error = "You don't have enough money";
-                }
             }
             catch
             {
-                ViewBag.Error = "Cannot parse UserID to int";
+                var errorMessage = "Cannot parse UserID to int";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error += "\n" + errorMessage : errorMessage;
+                TempData.Remove("errorMessage");
+                TempData.Add("errorMessage", ViewBag.Error);
+                return RedirectToAction("Index", new { AnnounceID = AnnounceID });
+            }
+
+            if (!await _marketService.UserBuyListing(userId, AnnounceID ))
+            {
+                var errorMessage = "You don't have enough money";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error += "\n" + errorMessage : errorMessage;
+                TempData.Remove("errorMessage");
+                TempData.Add("errorMessage", ViewBag.Error);
+                return RedirectToAction("Index", new { AnnounceID = AnnounceID });
             }
             return RedirectToAction("Index", "Home");
         }

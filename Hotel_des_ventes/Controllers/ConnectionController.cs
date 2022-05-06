@@ -32,26 +32,31 @@ namespace Hotel_des_ventes.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(string Username, string Password)
         {
+            if (TempData["errorMessage"] != null)
+            {
+                ViewBag.Error = TempData["errorMessage"].ToString();
+                TempData.Remove("errorMessage");
+            }
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
             {
-                ViewBag.Error = "Please complete all fields";
+                var errorMessage = "Please complete all fields";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
                 return View();
             }
-            //TODO
-
             var user = _userService.Connect(Username, Password);
             if (user == null)
             {
-                ViewBag.Error = "Wrong username or password";
+                var errorMessage = "Wrong username or password";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
                 return View();
             }
-                
+
             DateTimeOffset dateTime = DateTimeOffset.Now;
             dateTime = dateTime.AddDays(1);
             CookieOptions option = new CookieOptions();
             option.Expires = dateTime;
             Response.Cookies.Append("UserID", user.Id.ToString(), option);
-            
+
             if (TempData["AnnounceID"] != null)
             {
                 var AnnounceID = TempData["AnnounceID"];
@@ -65,27 +70,37 @@ namespace Hotel_des_ventes.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(string Username, string Password, string ConfirmedPassword)
         {
-            //add verif mdp et userId
+            if (TempData["errorMessage"] != null)
+            {
+                ViewBag.Error = TempData["errorMessage"].ToString();
+                TempData.Remove("errorMessage");
+            }
+            
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
             {
-                ViewBag.Error = "Please complete all fields";
+                var errorMessage = "Please complete all fields";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
                 return View();
             }
             if (Password != ConfirmedPassword)
             {
-                ViewBag.Error = "Passwords do not match";
+                var errorMessage = "Passwords do not match";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
+
                 return View();
             }
             if (!_userService.IsNameAvailable(Username))
             {
-                ViewBag.Error = "Username is not available";
+                var errorMessage = "Username is not available";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
                 return View();
             }
 
             var new_user = await _userService.CreateUser(Username, Password);
             if (new_user == null)
             {
-                ViewBag.Error = "Error in database";
+                var errorMessage = "Error in database: Cannot create user";
+                ViewBag.Error = ViewBag.Error != null ? ViewBag.Error + "\n" + errorMessage : errorMessage;
                 return View();
             }
 
