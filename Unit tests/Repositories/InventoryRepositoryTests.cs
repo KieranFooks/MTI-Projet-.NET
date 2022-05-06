@@ -3,6 +3,7 @@ using API.Dbo;
 using API.Repositories;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
@@ -16,19 +17,12 @@ namespace Unit_tests.Repositories
 {
 	public class InventoryRepositoryTests
 	{
-		private DbContextOptions<Hotel_des_ventesContext> options;
-
-		public InventoryRepositoryTests()
+		private DbContextOptions<Hotel_des_ventesContext> InitData(string dbName)
 		{
-			options = new DbContextOptionsBuilder<Hotel_des_ventesContext>().
-				UseInMemoryDatabase(databaseName: "db")
+			var options = new DbContextOptionsBuilder<Hotel_des_ventesContext>().
+				UseInMemoryDatabase(databaseName: dbName)
 				.EnableSensitiveDataLogging()
 				.Options;
-			InitData();
-		}
-
-		private void InitData()
-		{
 			using var context = new Hotel_des_ventesContext(options);
 			context.Database.EnsureDeleted();
 			context.Database.EnsureCreated();
@@ -123,10 +117,13 @@ namespace Unit_tests.Repositories
 			context.Tinventories.AddRange(inventories);
 			context.Tmarkets.AddRange(market);
 			context.SaveChanges();
+
+			return options;
 		}
 
-		private InventoryRepository GetRepo()
+		private InventoryRepository GetRepo(string dbName)
 		{
+			var options = InitData(dbName);
 			var context = new Hotel_des_ventesContext(options);
 			var mapper = new Mapper(new MapperConfiguration(cfg =>
 			{
@@ -149,7 +146,7 @@ namespace Unit_tests.Repositories
 		{
 			int userId = 1;
 			int itemId = 2;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetUserItem_Success));
 
 			var item = repo.GetUserItem(userId, itemId);
 
@@ -164,7 +161,7 @@ namespace Unit_tests.Repositories
 		{
 			int userId = 42;
 			int itemId = 2;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetUserItem_UserNotFound));
 
 			var item = repo.GetUserItem(userId, itemId);
 
@@ -176,7 +173,7 @@ namespace Unit_tests.Repositories
 		{
 			int userId = 1;
 			int itemId = 42;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetUserItem_ItemNotFound));
 
 			var item = repo.GetUserItem(userId, itemId);
 
@@ -188,7 +185,7 @@ namespace Unit_tests.Repositories
 		{
 			int userId = 42;
 			int itemId = 42;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetUserItem_ItemAndUserNotFound));
 
 			var item = repo.GetUserItem(userId, itemId);
 
@@ -200,7 +197,7 @@ namespace Unit_tests.Repositories
 		{
 			int userId = 2;
 			int itemId = 2;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetUserItem_NoItem));
 
 			var item = repo.GetUserItem(userId, itemId);
 
@@ -216,7 +213,7 @@ namespace Unit_tests.Repositories
 				IdUser = 1,
 				Quantity = 10
 			};
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(UpdateQuantity_Success));
 
 			var updated = repo.UpdateQuantity(inventory);
 
@@ -239,7 +236,7 @@ namespace Unit_tests.Repositories
 				IdUser = 2,
 				Quantity = 10
 			};
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(UpdateQuantity_NoInventory));
 
 			var updated = repo.UpdateQuantity(inventory);
 
@@ -254,7 +251,7 @@ namespace Unit_tests.Repositories
 		public void GetUserInventory_Success()
 		{
 			int userId = 1;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetUserInventory_Success));
 
 			var inventory = repo.GetUserInventory(userId);
 
@@ -272,7 +269,7 @@ namespace Unit_tests.Repositories
 		public void GetUserInventory_EmptyInventory()
 		{
 			int userId = 3;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetUserInventory_EmptyInventory));
 
 			var inventory = repo.GetUserInventory(userId);
 
@@ -284,11 +281,12 @@ namespace Unit_tests.Repositories
 		public void GetUserInventory_UserNotFound()
 		{
 			int userId = 42;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetUserInventory_UserNotFound));
 
 			var inventory = repo.GetUserInventory(userId);
 
-			Assert.Null(inventory);
+			Assert.NotNull(inventory);
+			Assert.Empty(inventory);
 		}
 	}
 }

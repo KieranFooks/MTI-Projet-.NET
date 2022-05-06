@@ -17,19 +17,12 @@ namespace Unit_tests.Repositories
 {
 	public class UserRepositoryTests
 	{
-		private DbContextOptions<Hotel_des_ventesContext> options;
-
-		public UserRepositoryTests()
+		private DbContextOptions<Hotel_des_ventesContext> InitData(string dbName)
 		{
-			options = new DbContextOptionsBuilder<Hotel_des_ventesContext>().
-				UseInMemoryDatabase(databaseName: "db")
+			var options = new DbContextOptionsBuilder<Hotel_des_ventesContext>().
+				UseInMemoryDatabase(databaseName: dbName)
 				.EnableSensitiveDataLogging()
 				.Options;
-			InitData();
-		}
-
-		private void InitData()
-		{
 			using var context = new Hotel_des_ventesContext(options);
 			context.Database.EnsureDeleted();
 			context.Database.EnsureCreated();
@@ -57,10 +50,13 @@ namespace Unit_tests.Repositories
 			};
 			context.Tusers.AddRange(users);
 			context.SaveChanges();
+
+			return options;
 		}
 
-		private UserRepository GetRepo()
+		private UserRepository GetRepo(string dbName)
 		{
+			var options = InitData(dbName);
 			var context = new Hotel_des_ventesContext(options);
 			var mapper = new Mapper(new MapperConfiguration(cfg =>
 			{
@@ -81,7 +77,7 @@ namespace Unit_tests.Repositories
 		[Fact]
 		public void CountTest()
 		{
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(CountTest));
 			var count = repo.Count();
 
 			Assert.Equal(3, count);
@@ -91,7 +87,7 @@ namespace Unit_tests.Repositories
 		public void GetByIdTest_Success()
 		{
 			var id = 1;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetByIdTest_Success));
 			var user = repo.GetById(id);
 
 			Assert.NotNull(user);
@@ -102,7 +98,7 @@ namespace Unit_tests.Repositories
 		public void GetByIdTest_NotFound()
 		{
 			var id = 42;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetByIdTest_NotFound));
 			var user = repo.GetById(id);
 
 			Assert.Null(user);
@@ -112,7 +108,7 @@ namespace Unit_tests.Repositories
 		public void GetByNameTest_Success()
 		{
 			var name = "Legwarmer6486";
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetByNameTest_Success));
 			var user = repo.GetByName(name);
 
 			Assert.NotNull(user);
@@ -123,7 +119,7 @@ namespace Unit_tests.Repositories
 		public void GetByNameTest_NotFound()
 		{
 			var name = "Anonymous";
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetByNameTest_NotFound));
 			var user = repo.GetByName(name);
 
 			Assert.Null(user);
@@ -136,7 +132,7 @@ namespace Unit_tests.Repositories
 			var senderId = 1;
 			var receiverId = 2;
 
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(TransferUserMoney_Success));
 			var transfer = repo.TransferUserMoney(senderId, receiverId, amount);
 
 			Assert.True(transfer);
@@ -157,7 +153,7 @@ namespace Unit_tests.Repositories
 			var senderId = 2;
 			var receiverId = 1;
 
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(TransferUserMoney_NotEnoughMoney));
 			var transfer = repo.TransferUserMoney(senderId, receiverId, amount);
 
 			Assert.False(transfer);
@@ -178,7 +174,7 @@ namespace Unit_tests.Repositories
 			var senderId = 42;
 			var receiverId = 1;
 
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(TransferUserMoney_SenderNotFound));
 			var transfer = repo.TransferUserMoney(senderId, receiverId, amount);
 
 			Assert.False(transfer);
@@ -196,7 +192,7 @@ namespace Unit_tests.Repositories
 			var senderId = 1;
 			var receiverId = 42;
 
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(TransferUserMoney_ReceiverNotFound));
 			var transfer = repo.TransferUserMoney(senderId, receiverId, amount);
 
 			Assert.False(transfer);

@@ -16,19 +16,12 @@ namespace Unit_tests.Repositories
 {
 	public class MarketRepositoryTests
 	{
-		private DbContextOptions<Hotel_des_ventesContext> options;
-
-		public MarketRepositoryTests()
+		private DbContextOptions<Hotel_des_ventesContext> InitData(string dbName)
 		{
-			options = new DbContextOptionsBuilder<Hotel_des_ventesContext>().
-				UseInMemoryDatabase(databaseName: "db")
+			var options = new DbContextOptionsBuilder<Hotel_des_ventesContext>().
+				UseInMemoryDatabase(databaseName: dbName)
 				.EnableSensitiveDataLogging()
 				.Options;
-			InitData();
-		}
-
-		private void InitData()
-		{
 			using var context = new Hotel_des_ventesContext(options);
 			context.Database.EnsureDeleted();
 			context.Database.EnsureCreated();
@@ -101,10 +94,13 @@ namespace Unit_tests.Repositories
 			context.Titems.AddRange(items);
 			context.Tmarkets.AddRange(market);
 			context.SaveChanges();
+
+			return options;
 		}
 
-		private MarketRepository GetRepo()
+		private MarketRepository GetRepo(string dbName)
 		{
+			var options = InitData(dbName);
 			var context = new Hotel_des_ventesContext(options);
 			var mapper = new Mapper(new MapperConfiguration(cfg =>
 			{
@@ -126,7 +122,7 @@ namespace Unit_tests.Repositories
 		public void GetById_Success()
 		{
 			var id = 1;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetById_Success));
 			var listing = repo.GetById(id);
 
 			Assert.NotNull(listing);
@@ -137,7 +133,7 @@ namespace Unit_tests.Repositories
 		public void GetById_NotFound()
 		{
 			var id = 42;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetById_NotFound));
 			var user = repo.GetById(id);
 
 			Assert.Null(user);
@@ -147,18 +143,18 @@ namespace Unit_tests.Repositories
 		public void GetOpenListingsByItemId_Success()
 		{
 			var id = 1;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetOpenListingsByItemId_Success));
 			var listings = repo.GetOpenListingsByItemId(id);
 
 			Assert.NotNull(listings);
-			Assert.Equal(2, listings!.Count());
+			Assert.Single(listings);
 		}
 
 		[Fact]
 		public void GetOpenListingsByItemId_NotFound()
 		{
 			var id = 42;
-			var repo = GetRepo();
+			var repo = GetRepo(nameof(GetOpenListingsByItemId_NotFound));
 			var listings = repo.GetOpenListingsByItemId(id);
 
 			Assert.NotNull(listings);
