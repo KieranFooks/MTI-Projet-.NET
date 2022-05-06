@@ -18,7 +18,6 @@ namespace Unit_tests.Services
 {
 	public class ItemServiceTests
 	{
-		private DbContextOptions<Hotel_des_ventesContext> options;
 		IEnumerable<Item> items = new List<Item>
 		{
 			new Item
@@ -35,32 +34,8 @@ namespace Unit_tests.Services
 			}
 		};
 
-		public ItemServiceTests()
-		{
-			options = new DbContextOptionsBuilder<Hotel_des_ventesContext>().
-				UseInMemoryDatabase(databaseName: "db")
-				.EnableSensitiveDataLogging()
-				.Options;
-		}
-
 		private ItemService GetService(IItemRepository itemRepository)
 		{
-			var context = new Hotel_des_ventesContext(options);
-			var mapper = new Mapper(new MapperConfiguration(cfg =>
-			{
-				cfg.CreateMap<Tinventory, Inventory>();
-				cfg.CreateMap<Inventory, Tinventory>();
-				cfg.CreateMap<Tuser, User>();
-				cfg.CreateMap<User, Tuser>();
-				cfg.CreateMap<Titem, Item>();
-				cfg.CreateMap<Item, Titem>();
-				cfg.CreateMap<Tmarket, Market>();
-				cfg.CreateMap<Market, Tmarket>();
-			}));
-
-			var userRepoLogger = Mock.Of<ILogger<UserRepository>>();
-			var inventoryRepoLogger = Mock.Of<ILogger<InventoryRepository>>();
-
 			return new ItemService(itemRepository);
 		}
 
@@ -69,7 +44,7 @@ namespace Unit_tests.Services
 		{
 			int id = 1;
 			var mock = Mock.Of<IItemRepository>(r => r.GetById(id) == items.ElementAt(0));
-			var service = GetService(mock);
+			var service = new ItemService(mock);
 
 			var item = service.GetById(id);
 
@@ -82,7 +57,7 @@ namespace Unit_tests.Services
 		{
 			int id = 42;
 			var mock = Mock.Of<IItemRepository>(r => r.GetById(id) == null);
-			var service = GetService(mock);
+			var service = new ItemService(mock);
 
 			var item = service.GetById(id);
 
@@ -93,7 +68,7 @@ namespace Unit_tests.Services
 		public async Task GetAll_Success()
 		{
 			var mock = Mock.Of<IItemRepository>(r => r.Get("") == Task.FromResult(items));
-			var service = GetService(mock);
+			var service = new ItemService(mock);
 
 			var getAllItems = await service.GetAll();
 
@@ -105,7 +80,7 @@ namespace Unit_tests.Services
 		public async Task GetAll_Error()
 		{
 			var mock = Mock.Of<IItemRepository>(r => r.Get("") == Task.FromResult<IEnumerable<Item>?>(null));
-			var service = GetService(mock);
+			var service = new ItemService(mock);
 
 			var getAllItems = await service.GetAll();
 
