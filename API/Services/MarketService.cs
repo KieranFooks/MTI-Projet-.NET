@@ -131,11 +131,13 @@ namespace API.Services
             }
             
             int totalPrice = 0;
+			int numberOfItems = 0;
             foreach (var listing in listings)
             {
-                totalPrice += listing.Price;
+                totalPrice += listing.Price * listing.Quantity;
+				numberOfItems += listing.Quantity;
             }
-            var averagePrice = listings.Count() <= 0 ? 0 : totalPrice / listings.Count();
+            var averagePrice = numberOfItems <= 0 ? 0 : totalPrice / numberOfItems;
 
             return new ItemAveragePrice() { Id = itemId, Name = item.Name, AveragePrice = averagePrice };
         }

@@ -29,7 +29,7 @@ namespace API.Services
 			var user_insert = await _userRepository.Insert(user);
 			if (user_insert == null)
 				return null;
-			// TODO: Give items to the user
+
 			List<Inventory> inventories = new List<Inventory>();
 			
 			foreach (var item in items)
