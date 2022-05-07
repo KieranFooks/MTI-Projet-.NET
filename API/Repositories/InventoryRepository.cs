@@ -91,6 +91,7 @@ namespace API.Repositories
 				return null;
 			}
 		}
+
 		public async Task<IEnumerable<Inventory>?> InsertRange(List<Inventory> entities)
 		{
 			List<Tinventory> dbEntities = _mapper.Map<List<Tinventory>>(entities);

@@ -81,14 +81,45 @@ namespace Unit_tests.Repositories
 		}
 
 		[Fact]
-		public void GetOpenListingsByItemId_NotFound()
+		public void RemoveListing_Success()
+		{
+			var id = 1;
+			var repo = GetRepo(nameof(RemoveListing_Success));
+			var removed = repo.RemoveListing(id);
+
+			Assert.True(removed);
+
+			var listing = repo.GetById(id);
+
+			Assert.NotNull(listing);
+			Assert.Equal(id, listing!.Id);
+			Assert.True(listing.IsSold);
+		}
+
+		[Fact]
+		public void RemoveListing_NotFound()
 		{
 			var id = 42;
-			var repo = GetRepo(nameof(GetOpenListingsByItemId_NotFound));
-			var listings = repo.GetOpenListingsByItemId(id);
+			var repo = GetRepo(nameof(RemoveListing_NotFound));
+			var removed = repo.RemoveListing(id);
 
-			Assert.NotNull(listings);
-			Assert.Empty(listings);
+			Assert.False(removed);
+		}
+
+		[Fact]
+		public void RemoveListing_AlreadySold()
+		{
+			var id = 3;
+			var repo = GetRepo(nameof(RemoveListing_AlreadySold));
+			var removed = repo.RemoveListing(id);
+
+			Assert.True(removed);
+
+			var listing = repo.GetById(id);
+
+			Assert.NotNull(listing);
+			Assert.Equal(id, listing!.Id);
+			Assert.True(listing.IsSold);
 		}
 	}
 }
