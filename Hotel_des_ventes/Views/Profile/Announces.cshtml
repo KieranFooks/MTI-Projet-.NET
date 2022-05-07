@@ -35,7 +35,7 @@
     </thead>
     @foreach(var item in Model.Announces)
     {
-        <tr style="height:50px" onclick="location.href = '@(Url.Action("Index","Item", new { AnnounceID = item.Id }))'">
+        <tr style="height:50px">
             <td>@Html.DisplayFor(ModelItem => item.Item)</td>
             <td>@Html.DisplayFor(ModelItem => item.Price)</td>
             <td>@Html.DisplayFor(ModelItem => item.Quantity)</td>
