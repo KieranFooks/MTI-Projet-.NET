@@ -196,5 +196,126 @@ namespace Unit_tests.Repositories
 			Assert.NotNull(inventory);
 			Assert.Empty(inventory);
 		}
+
+		[Fact]
+		public async Task InsertRange_Success()
+		{
+			List<Inventory> inventories = new List<Inventory>
+			{
+				new Inventory
+				{
+					IdUser = 3,
+					IdItem = 1,
+					Quantity = 1
+				},
+				new Inventory
+				{
+					IdUser = 3,
+					IdItem = 2,
+					Quantity = 1
+				}
+			};
+			var repo = GetRepo(nameof(InsertRange_Success));
+
+			var insert = await repo.InsertRange(inventories);
+
+			Assert.NotNull(insert);
+			Assert.Equal(2, insert!.Count());
+			Assert.Equal(inventories[0].IdUser, insert!.ElementAt(0).IdUser);
+			Assert.Equal(inventories[0].IdItem, insert!.ElementAt(0).IdItem);
+			Assert.Equal(inventories[0].Quantity, insert!.ElementAt(0).Quantity);
+			Assert.Equal(inventories[1].IdUser, insert!.ElementAt(1).IdUser);
+			Assert.Equal(inventories[1].IdItem, insert!.ElementAt(1).IdItem);
+			Assert.Equal(inventories[1].Quantity, insert!.ElementAt(1).Quantity);
+
+			var get = repo.GetUserInventory(3);
+
+			Assert.NotNull(get);
+			Assert.Equal(2, get!.Count());
+			Assert.Equal(inventories[0].IdUser, get!.ElementAt(0).IdUser);
+			Assert.Equal(inventories[0].IdItem, get!.ElementAt(0).IdItem);
+			Assert.Equal(inventories[0].Quantity, get!.ElementAt(0).Quantity);
+			Assert.Equal(inventories[1].IdUser, get!.ElementAt(1).IdUser);
+			Assert.Equal(inventories[1].IdItem, get!.ElementAt(1).IdItem);
+			Assert.Equal(inventories[1].Quantity, get!.ElementAt(1).Quantity);
+		}
+
+		[Fact]
+		public async Task InsertRange_AlreadyPresent()
+		{
+			List<Inventory> inventories = new List<Inventory>
+			{
+				new Inventory
+				{
+					IdUser = 1,
+					IdItem = 1,
+					Quantity = 1
+				},
+				new Inventory
+				{
+					IdUser = 3,
+					IdItem = 2,
+					Quantity = 1
+				}
+			};
+			var repo = GetRepo(nameof(InsertRange_AlreadyPresent));
+
+			var insert = await repo.InsertRange(inventories);
+
+			Assert.Null(insert);
+
+			var get = repo.GetUserInventory(3);
+
+			Assert.NotNull(get);
+			Assert.Empty(get);
+		}
+
+		[Fact]
+		public async Task Insert_Success()
+		{
+			Inventory inventory = new Inventory
+			{
+				IdUser = 3,
+				IdItem = 1,
+				Quantity = 1
+			};
+			var repo = GetRepo(nameof(Insert_Success));
+
+			var insert = await repo.Insert(inventory);
+
+			Assert.NotNull(insert);
+			Assert.Equal(inventory.IdUser, insert!.IdUser);
+			Assert.Equal(inventory.IdItem, insert.IdItem);
+			Assert.Equal(inventory.Quantity, insert.Quantity);
+
+			var get = repo.GetUserInventory(3);
+
+			Assert.NotNull(get);
+			Assert.Single(get);
+			Assert.Equal(inventory.IdUser, get!.ElementAt(0).IdUser);
+			Assert.Equal(inventory.IdItem, get!.ElementAt(0).IdItem);
+			Assert.Equal(inventory.Quantity, get!.ElementAt(0).Quantity);
+		}
+
+		[Fact]
+		public async Task Insert_AlreadyPresent()
+		{
+			Inventory inventory = new Inventory
+			{
+				IdUser = 1,
+				IdItem = 1,
+				Quantity = 1
+			};
+			var repo = GetRepo(nameof(Insert_AlreadyPresent));
+
+			var insert = await repo.Insert(inventory);
+
+			Assert.Null(insert);
+
+			var get = repo.GetUserInventory(3);
+
+			Assert.NotNull(get);
+			Assert.Empty(get);
+		}
 	}
 }

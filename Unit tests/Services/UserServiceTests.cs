@@ -257,7 +257,7 @@ namespace Unit_tests.Services
 			var newUser = await service.CreateUser(username, password);
 
 			Assert.NotNull(newUser);
-			Assert.Equal(user!, newUser!);
+			Assert.Equal(user, newUser);
 		}
 	}
 }

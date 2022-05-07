@@ -91,15 +91,15 @@ namespace API.Repositories
 				return null;
 			}
 		}
-		public async Task<Inventory?> InsertRange(List<Inventory> entity)
+		public async Task<IEnumerable<Inventory>?> InsertRange(List<Inventory> entities)
 		{
-			List<Tinventory> dbEntity = _mapper.Map<List<Tinventory>>(entity);
-			await _set.AddRangeAsync(dbEntity);
+			List<Tinventory> dbEntities = _mapper.Map<List<Tinventory>>(entities);
+			await _set.AddRangeAsync(dbEntities);
 			try
 			{
 				await _context.SaveChangesAsync();
-				Inventory newEntity = _mapper.Map<Inventory>(dbEntity);
-				return newEntity;
+				List<Inventory> newEntities = _mapper.Map<List<Inventory>>(dbEntities);
+				return newEntities;
 			}
 			catch (Exception ex)
 			{
