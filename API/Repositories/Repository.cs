@@ -22,11 +22,6 @@ namespace API.Repositories
 			_logger = logger;
 		}
 
-		public virtual async Task<bool> Delete(long idEntity)
-		{
-			throw new NotImplementedException();
-		}
-
 		public virtual async Task<IEnumerable<ModelEntity>?> Get(string includeTables)
 		{
 			try
@@ -65,11 +60,6 @@ namespace API.Repositories
 				_logger.LogError("error on db", ex);
 				return null;
 			}
-		}
-
-		public virtual async Task<ModelEntity> Update(ModelEntity entity)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }
